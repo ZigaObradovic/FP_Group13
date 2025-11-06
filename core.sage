@@ -205,3 +205,82 @@ def cubic_graphs(n, connected=True):
         raise ValueError("n mora biti sodo in ≥ 4.")
     flags = f"-d3 -D3 {'-c ' if connected else ''}{n}"
     return graphs.nauty_geng(flags)
+
+
+
+def three_right_gadgets_star():
+    # ============================================================
+    # Zgradi nov graf H, v katerem je en sredinski vozel c
+    # povezan s TREMI desnimi gradniki (_gadget_right()).
+    # - vsak desni gradnik da terminal t (stopnje 2),
+    #   ki ga tukaj povežemo na c → postane stopnje 3
+    # - c ima tri povezave → stopnja 3
+    #
+    # Vrne:
+    #   H : Graph (nov graf)
+    #   c : oznaka sredinskega vozlišča
+    #   terms : seznam terminalov treh desnih gradnikov (po vgradnji)
+    # ============================================================
+    H = Graph(multiedges=False, loops=False)
+    next_id = 0
+    terminals = []
+
+    # dodaj 3× desni gradnik in shrani njihove terminale
+    for _ in range(3):
+        Rg, tR = _gadget_right()
+        mapping = _add_with_offset(H, Rg, next_id)
+        terminals.append(mapping[tR])
+        next_id += Rg.num_verts()
+
+    # sredinski vozel c in povezave nanj
+    c = next_id
+    H.add_vertex(c)
+    for t in terminals:
+        H.add_edge(c, t)
+
+    # hiter sanity-check
+    # assert all(d == 3 for d in H.degree()), "Ni kubičen!"
+    return H
+
+def left_gadgets_bridge():
+    # ============================================================
+    # Zgradi nov graf H:
+    #   m1 ---- m2   (vmesni vozlišči, povezana z robom)
+    #   |       |
+    #  L_a     L_b   (na m1 in m2 priključen po en levi gradnik)
+    #   |       |
+    #  L_c     L_d   (na m1 in m2 priključen še EN levi gradnik)
+    #
+    # Skupaj: 4 × levi gradnik (4×5 = 20 vozlišč) + 2 vmesna = 22.
+    # Vrnemo:
+    #   H  : Graph
+    #   m1 : int (prvo vmesno vozlišče)
+    #   m2 : int (drugo vmesno vozlišče)
+    # ============================================================
+    H = Graph(multiedges=False, loops=False)
+    next_id = 0
+
+    # vgradi 4 leve gradnike in zabeleži njihove terminale
+    terminals = []
+    for _ in range(4):
+        Lg, t = _gadget_left()
+        mapping = _add_with_offset(H, Lg, next_id)
+        terminals.append(mapping[t])
+        next_id += Lg.num_verts()
+
+    # ustvarimo vmesni vozlišči m1, m2 in ju povežemo
+    m1, m2 = next_id, next_id + 1
+    H.add_vertices([m1, m2])
+    H.add_edge(m1, m2)
+
+    # priklopi po dve levi gradniki na vsakega od m1, m2
+    # (prva dva terminala na m1, druga dva na m2)
+    H.add_edge(m1, terminals[0])
+    H.add_edge(m1, terminals[2])
+    H.add_edge(m2, terminals[1])
+    H.add_edge(m2, terminals[3])
+
+    # sanity-check: kubičnost
+    # assert all(d == 3 for d in H.degree()), "Ni kubičen!"
+
+    return H
