@@ -26,6 +26,30 @@ Moj predlog je, da razdeliva to kratko predstavitev na:
 
 \section{Uvod}
 
+V projektu obravnavamo domnevo, ki govori o minimizaciji števila poti v razredu 
+\textbf{kubičnih grafov}, torej grafov, kjer ima vsako vozlišče stopnjo 3.
+Za dani povezani graf $G$ definiramo \textit{subpath number}, označen s $pn(G)$,
+kot število vseh preprostih poti v grafu, vključno s trivialnimi potmi dolžine 0.
+Preprosta pot je zaporedje vozlišč $(v_0, v_1, \dots, v_\ell)$ brez ponovitev,
+kjer je vsak par zaporednih vozlišč povezan z robom.
+
+V literaturi je bila postavljena domneva, da za vsako sodo število vozlišč $n$
+obstaja natanko en kubični graf $L_n$, ki ima najmanjši subpath number med vsemi
+kubičnimi grafi z $n$ vozlišči.
+Grafi $L_n$ so sestavljeni iz več kopij grafa $K_4 - e$
+(popolnega grafa na štirih vozliščih, iz katerega odstranimo en rob),
+ki jih povežemo v verižni strukturi. Na obeh koncih se tej verigi dodata še
+posebna \textit{pendant bloka} – eden na 5, drugi pa na 7 vozlišč.
+
+Kasneje se je pokazalo, da domneva za dovolj velika $n$ ne drži,
+vendar še ni znano, pri katerem najmanjšem $n$ se pojavi prva protimera.
+Namen našega projekta je torej:
+\begin{itemize}
+    \item preveriti domnevo za manjša, obvladljiva števila vozlišč $n$,
+    \item in poskusiti poiskati protimero, torej kubični graf z manjšim
+    subpath number kot $L_n$.
+\end{itemize}
+
 \section{Priprava}
 
 \section{Načrt dela}
