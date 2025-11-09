@@ -4,6 +4,7 @@
 \usepackage[slovene]{babel}
 \usepackage{lmodern} 
 \usepackage{amsmath,amssymb}
+\usepackage{graphicx}
 \usepackage[a4paper,margin=2cm]{geometry}
 
 \title{\textbf{Group 13: Subpath number - minimal cubic graphs}}
@@ -35,11 +36,18 @@ kjer je vsak par zaporednih vozlišč povezan z robom.
 
 V literaturi je bila postavljena domneva, da za vsako sodo število vozlišč $n$
 obstaja natanko en kubični graf $L_n$, ki ima najmanjši subpath number med vsemi
-kubičnimi grafi z $n$ vozlišči.
+kubičnimi grafi z $n \geq 10$ vozlišči.
 Grafi $L_n$ so sestavljeni iz več kopij grafa $K_4 - e$
 (popolnega grafa na štirih vozliščih, iz katerega odstranimo en rob),
 ki jih povežemo v verižni strukturi. Na obeh koncih se tej verigi dodata še
-posebna \textit{pendant bloka} – eden na 5, drugi pa na 7 vozlišč.
+posebna \textit{pendant bloka} - eden na 5, drugi pa na 7 vozlišč.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Ln_graf.png}
+    \caption{$L_n$ grafa za $n = 18$ in $20$}
+    \label{fig:Ln}
+\end{figure}
 
 Kasneje se je pokazalo, da domneva za dovolj velika $n$ ne drži,
 vendar še ni znano, pri katerem najmanjšem $n$ se pojavi prva protimera.
@@ -51,6 +59,14 @@ Namen našega projekta je torej:
 \end{itemize}
 
 \section{Priprava}
+
+Za čim bolj učinkovito delo bova najprej definirala osnovne funkcije, s katerimi bova izdelovala grafe in štela njihove poti:
+
+\begin{enumerate}
+  \item $subpath\_number(Graf)$: Funkcija, ki sprejme katerikoli graf in vrne \textbf{subpath number}.
+  \item $Ln\_graph(n)$: Funkcija, ki sprejme število vozlišč $n$ in vrne graf $L_n$. Ideja funkcije je, da definiramo tri različne gradnike, ki jih sestavimo skupaj gleda na število $n$.
+  \item $cubic\_graphs(n)$: Funkcija, ki sprejme število vozlišč $n$ in generira vse možne kubične grafe na $n$ vozliščih (za sode $n \geq 4$).
+\end{enumerate}
 
 \section{Načrt dela}
 

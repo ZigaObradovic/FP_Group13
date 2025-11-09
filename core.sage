@@ -195,7 +195,7 @@ def subpath_number(G):
 
 from sage.all import graphs
 
-def cubic_graphs(n, connected=True):
+def cubic_graphs(n):
     """
     Vrne generator vseh (neizomorfnih) 3-regularnih grafov na n vozliščih.
     Če connected=True: samo povezani.
@@ -203,7 +203,7 @@ def cubic_graphs(n, connected=True):
     """
     if n % 2 or n < 4:
         raise ValueError("n mora biti sodo in ≥ 4.")
-    flags = f"-d3 -D3 {'-c ' if connected else ''}{n}"
+    flags = f"-d3 -D3 -c {n}"
     return graphs.nauty_geng(flags)
 
 
