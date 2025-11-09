@@ -17,14 +17,6 @@
     \large\textbf{KRATEK OPIS}
 \end{center}
 
-Moj predlog je, da razdeliva to kratko predstavitev na:
-
-\begin{itemize}
-  \item \textbf{Uvod:} Na kratko razloživa najin problem.
-  \item \textbf{Priprava:} Naštejeva oz. poveva, kako bova naredila osnovne funkcije, ki nama bodo pomagale naprej.
-  \item \textbf{Načrt dela:} Na hitro razloživa, kako bova stvari poganjala oz. iskala, kar zahteva naloga.
-\end{itemize}
-
 \section{Uvod}
 
 V projektu obravnavamo domnevo, ki govori o minimizaciji števila poti v razredu 
@@ -65,9 +57,19 @@ Za čim bolj učinkovito delo bova najprej definirala osnovne funkcije, s kateri
 \begin{enumerate}
   \item $subpath\_number(Graf)$: Funkcija, ki sprejme katerikoli graf in vrne \textbf{subpath number}.
   \item $Ln\_graph(n)$: Funkcija, ki sprejme število vozlišč $n$ in vrne graf $L_n$. Ideja funkcije je, da definiramo tri različne gradnike, ki jih sestavimo skupaj gleda na število $n$.
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{gradniki.png}
+    \caption{Gradniki grafa $L_n$}
+    \label{fig:gradniki}
+\end{figure}
   \item $cubic\_graphs(n)$: Funkcija, ki sprejme število vozlišč $n$ in generira vse možne kubične grafe na $n$ vozliščih (za sode $n \geq 4$).
 \end{enumerate}
+Z uporabo teh treh funkcij želiva pokriti predvsem prvi del naloge, ki je dokazati domnevo, da ima graf $L_n$ najmanjši subpath number za majhne $n$ in poiskati kakšen protiprimer za večje $n$.
 
 \section{Načrt dela}
+
+Ko bodo osnovne funkcije definirane, bo najina prva naloga ta, da testirava njihovo pravilnost. Funkcijo $subpath\_number$ bova tako najprej testirala na zelo enostavnih grafih, ki niso nujno kubični. Želiva torej, da so testni grafi taki, da subpath number lahko izračunava sama brez dodatnih orodij ("na roke"). Če se bodo dobljeni rezultati ujemali z vrednostmi funkcije, bova funkcijo lahko uporabila tudi za grafe z več vozlišči. Podoben test bova naredila tudi za drugi dve osnovni funkciji.
+
 
 \end{document}
