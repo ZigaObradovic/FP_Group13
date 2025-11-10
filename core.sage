@@ -14,7 +14,6 @@ def _gadget_left():
     G.add_edge(t, 1)
     return G, t
 
-
 def _gadget_middle():
     """
     SREDNJI gradnik (4 vozlišča) = K4 - e, z dvema terminaloma stopnje 2.

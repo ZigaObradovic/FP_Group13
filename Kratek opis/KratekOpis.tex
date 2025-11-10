@@ -34,12 +34,12 @@ Grafi $L_n$ so sestavljeni iz več kopij grafa $K_4 - e$
 ki jih povežemo v verižni strukturi. Na obeh koncih se tej verigi dodata še
 posebna \textit{pendant bloka} - eden na 5, drugi pa na 7 vozlišč.
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{Ln_graf.png}
-    \caption{$L_n$ grafa za $n = 18$ in $20$}
-    \label{fig:Ln}
-\end{figure}
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{Ln_graf.png}
+%     \caption{$L_n$ grafa za $n = 18$ in $20$}
+%     \label{fig:Ln}
+% \end{figure}
 
 Kasneje se je pokazalo, da domneva za dovolj velika $n$ ne drži,
 vendar še ni znano, pri katerem najmanjšem $n$ se pojavi prva protimera.
@@ -72,6 +72,25 @@ Z uporabo teh treh funkcij želiva pokriti predvsem prvi del naloge, ki je dokaz
 Ko bodo osnovne funkcije definirane, bo najina prva naloga ta, da testirava njihovo pravilnost. Funkcijo $subpath\_number$ bova tako najprej testirala na zelo enostavnih grafih, ki niso nujno kubični. Želiva torej, da so testni grafi taki, da subpath number lahko izračunava sama brez dodatnih orodij ("na roke"). Če se bodo dobljeni rezultati ujemali z vrednostmi funkcije, bova funkcijo lahko uporabila tudi za grafe z več vozlišči. Podoben test bova naredila tudi za drugi dve osnovni funkciji.
 
 Naslednji korak pa je primerjati subpath number grafov $L_n$ z vsemi obstoječimi kubičnimi grafi za isti $n$. Zanima naju torej kateri je najmanjši $n$, da obstaja kakšen kubični graf, ki ima subpath number manjši kot $L_n$. Iz protiprimerov, ki jih bova našla pa si želiva konstruirati grafe, ki bodo imeli manjši subpath number za vsak večji $n$.
+
+\section{Hipoteza}
+
+Po prvem testu se zdi, da imajo za večje $n$ naslednji grafi nižji subpath number kot grafi $L_n$:
+\begin{itemize}
+  \item Če je $n = 6q - 2$ je graf sestavljen iz $q$ pendant blokov na 5 vozliščih, ki so pripeti na $q - 2$ med seboj povezanih vozlišč
+  \item Če je $n = 6q$ je graf sestavljen iz $q - 1$ pendant blokov na 5 vozliščih in enega na 7 vozliščih, ki so pripeti na $q - 2$ med seboj povezanih vozlišč
+  \item Če je $n = 6q + 2$ je graf sestavljen iz $q - 2$ pendant blokov na 5 vozliščih in dveh na 7 vozliščih, ki so pripeti na $q - 2$ med seboj povezanih vozlišč
+\end{itemize}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.3\textwidth]{graf_n28.png}
+\includegraphics[width=0.3\textwidth]{graf_n30.png}
+\includegraphics[width=0.3\textwidth]{graf_n32.png}
+\caption{Primeri boljših grafov za $n = 28$, $30$ in $32$}
+\end{figure}
+
+Najina naloga sedaj je preveriti resničnost te hipoteze in morda poiskati kakšne grafe z še nižjim subpath number od teh.
 
 
 
