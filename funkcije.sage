@@ -196,8 +196,7 @@ from sage.all import graphs
 
 def cubic_graphs(n):
     """
-    Vrne generator vseh (neizomorfnih) 3-regularnih grafov na n vozliščih.
-    Če connected=True: samo povezani.
+    Vrne generator vseh (neizomorfnih) 3-regularnih povezanih grafov na n vozliščih.
     OPOMBA: n mora biti sodo in ≥ 4.
     """
     if n % 2 or n < 4:
