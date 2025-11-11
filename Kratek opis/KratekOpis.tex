@@ -36,7 +36,7 @@ posebna \textit{pendant bloka} - eden na 5, drugi pa na 7 vozlišč.
 
 % \begin{figure}[h!]
 %     \centering
-%     \includegraphics[width=0.7\textwidth]{Ln_graf.png}
+%     \includegraphics[width=0.7\textwidth]{Slike/Ln_graf.png}
 %     \caption{$L_n$ grafa za $n = 18$ in $20$}
 %     \label{fig:Ln}
 % \end{figure}
@@ -56,16 +56,17 @@ Za čim bolj učinkovito delo bova najprej definirala osnovne funkcije, s kateri
 
 \begin{enumerate}
   \item $subpath\_number(Graf)$: Funkcija, ki sprejme katerikoli graf in vrne \textbf{subpath number}.
-  \item $Ln\_graph(n)$: Funkcija, ki sprejme število vozlišč $n$ in vrne graf $L_n$. Ideja funkcije je, da definiramo tri različne gradnike, ki jih sestavimo skupaj gleda na število $n$.
+  \item $Ln\_graph(n)$: Funkcija, ki sprejme število vozlišč $n$ in vrne \textbf{graf $L_n$}. Ideja funkcije je, da definiramo tri različne gradnike, ki jih sestavimo skupaj gleda na število $n$.
   \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{gradniki.png}
+    \includegraphics[width=0.5\textwidth]{Slike/gradniki.png}
     \caption{Gradniki grafa $L_n$}
     \label{fig:gradniki}
 \end{figure}
-  \item $cubic\_graphs(n)$: Funkcija, ki sprejme število vozlišč $n$ in generira vse možne kubične grafe na $n$ vozliščih (za sode $n \geq 4$).
+  \item $cubic\_graphs(n)$: Funkcija, ki sprejme število vozlišč $n$ in generira vse možne \textbf{kubične grafe} na $n$ vozliščih (za sode $n \geq 4$).
 \end{enumerate}
-Z uporabo teh treh funkcij želiva pokriti predvsem prvi del naloge, ki je dokazati domnevo, da ima graf $L_n$ najmanjši subpath number za majhne $n$ in poiskati kakšen protiprimer za večje $n$.
+
+\noindent Z uporabo teh treh funkcij želiva pokriti predvsem prvi del naloge, ki je dokazati domnevo, da ima graf $L_n$ najmanjši subpath number za majhne $n$ in poiskati kakšen protiprimer za večje $n$.
 
 \section{Načrt dela}
 
@@ -84,13 +85,13 @@ Po prvem testu se zdi, da imajo za večje $n$ naslednji grafi nižji subpath num
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.3\textwidth]{graf_n28.png}
-\includegraphics[width=0.3\textwidth]{graf_n30.png}
-\includegraphics[width=0.3\textwidth]{graf_n32.png}
+\includegraphics[width=0.3\textwidth]{Slike/graf_n28.png}
+\includegraphics[width=0.3\textwidth]{Slike/graf_n30.png}
+\includegraphics[width=0.3\textwidth]{Slike/graf_n32.png}
 \caption{Primeri boljših grafov za $n = 28$, $30$ in $32$}
 \end{figure}
 
-Najina naloga sedaj je preveriti resničnost te hipoteze in morda poiskati kakšne grafe z še nižjim subpath number od teh.
+\noindent Najina naloga sedaj je preveriti resničnost te hipoteze in morda poiskati kakšne grafe s še nižjim subpath number od teh.
 
 
 
