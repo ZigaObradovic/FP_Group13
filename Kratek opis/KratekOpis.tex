@@ -46,7 +46,7 @@ vendar še ni znano, pri katerem najmanjšem $n$ se pojavi prva protimera.
 Namen našega projekta je torej:
 \begin{itemize}
     \item preveriti domnevo za manjša, obvladljiva števila vozlišč $n$,
-    \item in poskusiti poiskati protimero, torej kubični graf z manjšim
+    \item in poskusiti poiskati protimer, torej kubični graf z manjšim
     subpath number kot $L_n$.
 \end{itemize}
 
@@ -74,6 +74,8 @@ Ko bodo osnovne funkcije definirane, bo najina prva naloga ta, da testirava njih
 
 Naslednji korak pa je primerjati subpath number grafov $L_n$ z vsemi obstoječimi kubičnimi grafi za isti $n$. Zanima naju torej kateri je najmanjši $n$, da obstaja kakšen kubični graf, ki ima subpath number manjši kot $L_n$. Iz protiprimerov, ki jih bova našla pa si želiva konstruirati grafe, ki bodo imeli manjši subpath number za vsak večji $n$.
 
+Ker je vseh kubičnih grfov $41301$ za $n = 18$, za $n = 20$ pa že kar $510489$, bo težko primerjati subpath number čisto vseh grafov za $n \geq 20$. Zato bova uporabila \textbf{simulated annealing}, ki je metahevristična metoda, kjer naključno spreminjamo povezave prvotnega grafa v upanju, da najdemo ustreznejšo rešitev. Še boljše pa bi bilo, če nama uspe skonstruirati tako zaporedje grafov, da bo njihov subpath
+number manjši od $L_n$ grafov za vsak $n$. Tako bi subpath number lahko primerjala za veliko večje $n$, saj bi morala za vsak $n$ izračunati subpath number le za dva grafa. Od tod sledi hipoteza: 
 \section{Hipoteza}
 
 Po prvem testu se zdi, da imajo za večje $n$ naslednji grafi nižji subpath number kot grafi $L_n$:
@@ -85,10 +87,10 @@ Po prvem testu se zdi, da imajo za večje $n$ naslednji grafi nižji subpath num
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.3\textwidth]{Slike/graf_n28.png}
-\includegraphics[width=0.3\textwidth]{Slike/graf_n30.png}
-\includegraphics[width=0.3\textwidth]{Slike/graf_n32.png}
-\caption{Primeri boljših grafov za $n = 28$, $30$ in $32$}
+\includegraphics[width=0.24\textwidth]{Slike/graf_n28.png}
+\includegraphics[width=0.24\textwidth]{Slike/graf_n30.png}
+\includegraphics[width=0.24\textwidth]{Slike/graf_n32.png}
+\caption{Primeri \textit{boljših} grafov za $n = 28$, $30$ in $32$}
 \end{figure}
 
 \noindent Najina naloga sedaj je preveriti resničnost te hipoteze in morda poiskati kakšne grafe s še nižjim subpath number od teh.
