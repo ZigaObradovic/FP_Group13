@@ -1,128 +1,163 @@
-def _gadget_left():
-    """
-    LEVI gradnik (5 vozlišč).
-    Konstrukcija: vzamemo K4 - e in dodamo novo vozlišče t, ki ga povežemo
-    z obema vozliščema stopnje 2. V tem gradniku je t edini terminal (stopnje 2),
-    namenjen za povezavo naprej v verigo.
-    """
-    H = graphs.CompleteGraph(4)  # K4
-    H.delete_edge(0, 1)          # K4 - e; 0 in 1 sta zdaj stopnje 2
-    G = H.copy()
-    t = 4
-    G.add_vertex(t)
-    G.add_edge(t, 0)
-    G.add_edge(t, 1)
-    return G, t
+def left_gadget():
+    """Konstruira levi gradnik"""
 
-def _gadget_middle():
-    """
-    SREDNJI gradnik (4 vozlišča) = K4 - e, z dvema terminaloma stopnje 2.
-    """
-    G = graphs.CompleteGraph(4)
+    G = graphs.CompleteGraph(4)  # K4
+    G.delete_edge(0, 1)          # K4 - e; 0 in 1 sta zdaj stopnje 2
+
+    t = 4
+    G.add_vertex(t) # Dodamo zgornje vozlišče
+    G.add_edge(t, 0)
+    G.add_edge(t, 1) # Povežemo zgornje vozlišče
+
+    return G, t # Vrnemo graf in vozlišče na katerega bomo vezali naprej
+
+def middle_gadget():
+    """konstruira srednji gradnik"""
+
+    G = graphs.CompleteGraph(4) # K4
     G.delete_edge(0, 1)  # zdaj sta 0 in 1 stopnje 2
-    L, R = 0, 1
+
+    L, R = 0, 1 # Vozlišči na kateri bomo naprej vezali
+
     return G, L, R
 
+def right_gadget():
+    """Konstruira desni gradnik"""
 
-def _gadget_right():
-    """
-    DESNI gradnik (7 vozlišč)
-    """
-    # 1) diamant K4 - e
-    D = graphs.CompleteGraph(4)
+    G = graphs.CompleteGraph(4)  # K4
+    G.delete_edge(0, 1)          # K4 - e; 0 in 1 sta zdaj stopnje 2
 
-    # 2) odstrani 'zgornji' rob med vozliščema stopnje 3
-    D.delete_edge(2, 3)
-
-    # 3) dodaj x in y, ki sta med seboj povezana
+    # Dodamo povezani vozlišči
     x = 4
     y = 5
-    D.add_vertices([x, y])
-    D.add_edge(x, y)
+    G.add_vertices([x, y])
+    G.add_edge(x, y)
 
-    # 4) povezavi iz 'zgornjih' vrhov diamanta na x in y
-    D.add_edge(2, x)
-    D.add_edge(3, y)
+    # Povežemo vozlišča
+    G.add_edge(0, x)
+    G.add_edge(1, y)
 
-    # 5) dodaj terminal t stopnje 2, ki se povezuje na x in y
     t = 6
-    D.add_vertex(t)
-    D.add_edge(x, t)
-    D.add_edge(y, t)
+    G.add_vertex(t) # Dodamo zgornje vozlišče
+    G.add_edge(t, x)
+    G.add_edge(t, y) # Povežemo zgornje vozlišče
 
-    return D, t
-
-
-
-def _add_with_offset(dst, H, offset):
-    """
-    Kopira graf H v dst z zamikom oznak 'offset'. Vrne 'mapping' star->nov.
-    """
-    mapping = {v: v + offset for v in H.vertices()}
-    H2 = H.relabel(mapping, inplace=False)
-    dst.add_vertices(H2.vertices())
-    dst.add_edges(H2.edges(labels=False))
-    return mapping
+    return G, t # Vrnemo graf in vozlišče na katerega bomo vezali naprej
 
 
-# ====== SESTAVLJANJE L_n ====================================================
+def add_gadget(G, t1, H, t2, t3 = ""):
+    """Podanemu grafu G doda graf H z zamaknjenim številčenjem vozlišč za k"""
+
+    k = G.num_verts()
+    mapping = {v: v + k for v in H.vertices()} # Slovar: staro številčenje -> novo številčenje
+    H2 = H.relabel(mapping, inplace=False) # Graf H z zamaknjenim številčenjem
+
+    # Graf H2 dodamo zraven grafa G in jih ne povežemo
+    G.add_vertices(H2.vertices())
+    G.add_edges(H2.edges(labels=False))
+
+    # Povežemo in označimo zadnje vozlišče
+    # Odvisno je od tega ali dodajamo srednje gradnike, ali leve oz. desne
+    if t3 != "":
+        G.add_edge(t1, mapping[t2])
+        t = mapping[t3]
+
+        return G, t
+    else:
+        G.add_edge(t1, mapping[t2])
+
+        return G
+   
 
 def Ln_graph(n):
-    """
-    Sestavi L_n iz 3 gradnikov po pravilu:
-      - začni z LEVIM gradnikom,
-      - dodaj m SREDNJIH gradnikov,
-      - končaj z DESNIM, če je n = 4k; ali spet z LEVIM, če je n = 4k - 2.
+    """Naredi Ln graf z n vozlišči."""
 
-    Velja:
-      n = 5 + 4m + 7  (če n ≡ 0 mod 4)  ->  m = (n-12)/4
-      n = 5 + 4m + 5  (če n ≡ 2 mod 4)  ->  m = (n-10)/4
-
-    Pogoji: n sodo, n ≥ 10.
-    Vrne: kubičen povezan graf z n vozlišči.
-    """
+    # Varovalka za sode n > 10
     if n % 2 != 0 or n < 10:
         raise ValueError("Za L_n mora biti n sodo in n >= 10.")
 
-    end_is_right = (n % 4 == 0)
-    m = (n - 12) // 4 if end_is_right else (n - 10) // 4
+    desni_konec = (n % 4 == 0) # Ali končamo z desnim grednikom
+    m = (n - 12) // 4 if desni_konec else (n - 10) // 4 # Število srednjih gradnikov
 
-    G = Graph(multiedges=False, loops=False)
-    next_id = 0
+    # Začnemo z levim gradnikom
+    G, t = left_gadget()
 
-    # 1) dodaj LEVI gradnik
-    Lg, tL = _gadget_left()
-    mapL = _add_with_offset(G, Lg, next_id)
-    prev = mapL[tL]            # 'desni' terminal levega gradnika
-    next_id += Lg.num_verts()
+    # Dodamo m srednjih gradnikov
+    if m > 0:
+        M, x, y = middle_gadget()
+        for _ in range(m):
+            G, t = add_gadget(G, t, M, x, y)
 
-    # 2) dodaj m SREDNJIH gradnikov v verigo
-    for _ in range(m):
-        Mg, Lterm, Rterm = _gadget_middle()
-        mapM = _add_with_offset(G, Mg, next_id)
-        # poveži prejšnji terminal na 'levi' terminal novega srednjega gradnika
-        G.add_edge(prev, mapM[Lterm])
-        prev = mapM[Rterm]     # novi 'desni' terminal verige
-        next_id += Mg.num_verts()
-
-    # 3) zaključi z DESNIM ali LEVIM gradnikom
-    if end_is_right:
-        Rg, tR = _gadget_right()
-        mapR = _add_with_offset(G, Rg, next_id)
-        G.add_edge(prev, mapR[tR])
-        next_id += Rg.num_verts()
+    # Zaključimo z levim oz. desnim gradnikom
+    if desni_konec:
+        D, x = right_gadget()
+        G = add_gadget(G, t, D, x)
     else:
-        Lg2, tL2 = _gadget_left()
-        mapL2 = _add_with_offset(G, Lg2, next_id)
-        G.add_edge(prev, mapL2[tL2])
-        next_id += Lg2.num_verts()
+        L, x = left_gadget()
+        G = add_gadget(G, t, L, x)
+    
+    return G
 
-    # ime in hitri check
-    G.name(f"L_{n}")
-    if G.num_verts() != n:
-        raise RuntimeError(f"Napačno št. vozlišč v L_{n}: {G.num_verts()} != {n}")
+def build_star(n):
+    """Naredi boljši graf kot Ln"""
+
+    # Varovalka za sode n > 10
+    if n % 2 != 0 or n < 10:
+        raise ValueError("Za L_n mora biti n sodo in n >= 10.")
+
+    # določanje začetnih in končnih gradnikov
+    mod = n % 6
+    m = (n - 10) // 6 # Število vmesnih gradnikov
+    if mod == 0:
+        levi_zacetek, levi_konec = True, False
+    elif mod == 2:
+        levi_zacetek, levi_konec = False, False
+    elif mod == 4:
+        levi_zacetek, levi_konec = True, True
+
+    # Začnemo s prvim gradnikom
+    if levi_zacetek:
+        G, t = left_gadget()
+    else: 
+        G, t = right_gadget()
+
+    # Dodamo m vmesnih (levih) gradnikov
+    if m > 0:
+        H, y = left_gadget()
+        for _ in range(m):
+            x = G.num_verts()
+            G.add_vertex(x) # Dodamo vozlišče za povezavo
+            G.add_edge(t, x) # povežemo ga z osnovo
+            G = add_gadget(G, x, H, y)
+            t = x
+
+    # Zadnji gradnik
+    if levi_konec:
+        H, y = left_gadget()
+        G = add_gadget(G, t, H, y)
+    else: 
+        H, y = right_gadget()
+        G = add_gadget(G, t, H, y)
 
     return G
+
+from sage.all import graphs
+
+def cubic_graphs(n):
+    """Vrne generator vseh (neizomorfnih) 3-regularnih povezanih grafov na n vozliščih."""
+
+    # varovalka za sodi n >= 4
+    if n % 2 or n < 4:
+        raise ValueError("n mora biti sodo in ≥ 4.")
+
+    # povemo, da želimo grafe z n vozlišči in stopnjo vozlišč točno 3 (najmanjša in največja stopnja je 3)
+    flags = f"-d3 -D3 -c {n}"
+
+    # vrnemo generator vseh takih grafov
+    return graphs.nauty_geng(flags) 
+
+
+
 
 
 def subpath_number(G):
@@ -192,14 +227,5 @@ def subpath_number(G):
 
 
 
-from sage.all import graphs
 
-def cubic_graphs(n):
-    """
-    Vrne generator vseh (neizomorfnih) 3-regularnih povezanih grafov na n vozliščih.
-    OPOMBA: n mora biti sodo in ≥ 4.
-    """
-    if n % 2 or n < 4:
-        raise ValueError("n mora biti sodo in ≥ 4.")
-    flags = f"-d3 -D3 -c {n}"
-    return graphs.nauty_geng(flags)
+
