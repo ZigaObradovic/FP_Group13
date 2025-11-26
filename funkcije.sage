@@ -141,6 +141,51 @@ def build_star(n):
 
     return G
 
+def build_star2(n):
+    """Naredi boljši graf kot Ln"""
+
+    # Varovalka za sode n > 10
+    if n % 2 != 0 or n < 10:
+        raise ValueError("Za L_n mora biti n sodo in n >= 10.")
+
+    # določanje začetnih in končnih gradnikov
+    mod = n % 6
+    m = (n - 10) // 6 # Število vmesnih gradnikov
+    if mod == 0:
+        srednji, levi_konec = False, False
+    elif mod == 2:
+        srednji, levi_konec = True, False
+    elif mod == 4:
+        srednji, levi_konec = False, True
+
+    # Začnemo z levim gradnikom
+    G, t = left_gadget()
+
+    # Dodamo m vmesnih (levih) gradnikov
+    if m > 0:
+        H, y = left_gadget()
+        for _ in range(m):
+            x = G.num_verts()
+            G.add_vertex(x) # Dodamo vozlišče za povezavo
+            G.add_edge(t, x) # povežemo ga z osnovo
+            G = add_gadget(G, x, H, y)
+            t = x
+
+    # Po potrebi dodamo srednji gradnik
+    if srednji:
+        H, x, y = middle_gadget()
+        G, t = add_gadget(G, t, H, x, y)
+
+    # Zadnji gradnik
+    if levi_konec:
+        H, y = left_gadget()
+        G = add_gadget(G, t, H, y)
+    else: 
+        H, y = right_gadget()
+        G = add_gadget(G, t, H, y)
+
+    return G
+
 from sage.all import graphs
 
 def cubic_graphs(n):

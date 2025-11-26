@@ -1,5 +1,70 @@
 import random
 
+def subpath_number(G):
+    # ============================================================
+    # Funkcija subpath_number(G)
+    # ------------------------------------------------------------
+    # Namen:
+    #   Izračuna število vseh poti v danem grafu G (vključno s
+    #   trivialnimi potmi dolžine 0).
+    #
+    # Definicija poti:
+    #   Pot je zaporedje vozlišč (v_0, v_1, ..., v_k) brez ponavljanj,
+    #   kjer sta vsaki zaporedni vozlišči povezni z robom grafa.
+    #   Graf je neorientiran, zato se obrnjene poti štejejo ločeno.
+    #
+    # Postopek:
+    #   1. Graf pretvorimo v numerično obliko (vozlišča 0..n-1).
+    #   2. Zgradimo seznam sosedov (adjacency list).
+    #   3. Iz vsakega vozlišča sprožimo rekurzivni DFS, ki šteje vse
+    #      možne poti brez ponavljanja vozlišč.
+    #   4. Uporabimo bitmasko (int) za označevanje že obiskanih vozlišč,
+    #      da je algoritem hiter in porabi malo pomnilnika.
+    #   5. Števec `total` poveča vsakič, ko najde veljavno pot
+    #      (tudi trivialno z enim samim vozliščem).
+    #
+    # Časovna zahtevnost:
+    #   Eksponentna v številu vozlišč, ker štejemo vse poti.
+    #   Uporabno za grafe velikosti do približno n ≤ 22.
+    #
+    # Rezultat:
+    #   Vrne celo število (int) — število vseh poti v G.
+    # ============================================================
+
+    # Pretvori vozlišča v indekse 0..n-1 za učinkovitejši dostop
+    verts = list(G.vertices())
+    idx = {v: i for i, v in enumerate(verts)}
+
+    # Zgradi seznam sosedov (adjacency list)
+    adj = [[] for _ in verts]
+    for v in verts:
+        i = idx[v]
+        for w in G.neighbors(v):
+            adj[i].append(idx[w])
+
+    n = len(verts)
+    total = 0  # števec vseh poti
+
+    # Rekurzivna funkcija za globinsko iskanje (DFS)
+    def dfs(u, mask):
+        # Povečamo števec ob vsakem obisku — vsaka kombinacija
+        # obiskanih vozlišč predstavlja eno pot
+        nonlocal total
+        total += 1
+
+        # Premaknemo se na vsakega soseda, ki še ni bil obiskan
+        for w in adj[u]:
+            bit = 1 << w
+            if not (mask & bit):  # če w še ni bil obiskan
+                dfs(w, mask | bit)
+
+    # Za vsako vozlišče zaženemo DFS kot začetno točko
+    for i in range(n):
+        dfs(i, 1 << i)
+
+    # Vrni skupno število poti
+    return total
+
 def random_cubic_neighbor(G, max_tries=500):
     """
     Iz povezanega kubičnega grafa G naredi sosednji POVEZAN kubični graf
