@@ -1,0 +1,431 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[slovene]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\title{Subpath number v kubičnih grafih:\\
+minimizacija in protimeri za grafe $L_n$}
+\author{Skupina 13: Subpath number -- minimalni kubični grafi}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Uvod}
+
+V projektu obravnavamo problem minimizacije števila poti v razredu kubičnih grafov,
+torej grafov, kjer ima vsako vozlišče stopnjo $3$.
+Naj bo $G=(V,E)$ povezan graf. 
+\emph{Subpath number} grafa $G$, označen s $pn(G)$, definiramo kot število vseh
+preprostih poti v grafu, vključno s trivialnimi potmi dolžine $0$.
+
+Preprosta pot dolžine $\ell$ je zaporedje vozlišč
+\[
+(v_0, v_1, \dots, v_\ell),
+\]
+kjer se vozlišča ne ponavljajo ($v_i \neq v_j$ za vse $0 \le i < j \le \ell$),
+vsak par zaporednih vozlišč pa je povezan z robom grafa 
+(za vsak $1 \le i \le \ell$ je $v_{i-1}v_i \in E$).
+Ker je graf neorientiran, poti, ki gredo v nasprotni smeri, štejemo ločeno.
+
+V literaturi je bila postavljena domneva, da za vsako sodo število vozlišč
+$n \ge 10$ obstaja natanko en kubični graf $L_n$, ki minimizira subpath number
+med vsemi kubičnimi grafi na $n$ vozliščih.
+Znano je, da domneva za dovolj velika $n$ ne drži, ni pa znano,
+pri katerem najmanjšem $n$ se pojavi prva protimera.
+
+Cilji projekta so bili:
+\begin{itemize}
+  \item izčrpno preveriti domnevo za manjša $n$, kjer je število kubičnih grafov
+  še obvladljivo;
+  \item za večja $n$ uporabiti metahevristiko \emph{simulated annealing} in poiskati
+  grafe z manjšim $pn(G)$ od $pn(L_n)$;
+  \item konstruirati nove družine grafov (z uporabo gradnikov iz definicije $L_n$)
+  in primerjati njihov subpath number z $pn(L_n)$.
+\end{itemize}
+
+\section{Teoretično ozadje}
+
+\subsection{Subpath number}
+
+Za poljuben povezan graf $G=(V,E)$ definiramo
+\[
+pn(G) = \#\{\text{preprostih poti v } G\},
+\]
+pri čemer kot poti štejemo tudi trivialne poti dolžine $0$
+(vsako vozlišče samo zase).
+Subpath number je torej globalna mera, ki upošteva vse možne preproste poti,
+ne le najkrajših ali najdaljših.
+
+Že za zelo majhne grafe se $pn(G)$ hitro poveča.
+Na primer:
+en sam rob ima $pn(G)=4$ (dve trivialni poti in dve usmerjeni poti po robu),
+trikotnik ima $pn(G)=15$, kvadrat $pn(G)=28$, popoln graf $K_4$ pa $pn(G)=64$.
+To nakazuje, da bo izračun $pn(G)$ v splošnem eksponenten v številu vozlišč
+in je zato primeren predvsem za grafe z zmernim $n$.
+
+\subsection{Družina grafov $L_n$ in domneva}
+
+Grafi $L_n$ so definirani za soda $n \ge 10$ in so zgrajeni iz več kopij grafa
+$K_4 - e$ (popoln graf na štirih vozliščih, iz katerega odstranimo en rob),
+ki so povezane v linearno verigo. Na koncih verige so dodani t.\ i.\ pendant bloki.
+
+Natančneje:
+\begin{itemize}
+  \item če je $n = 4q - 2$, je $L_n$ sestavljen iz $(n-10)/4$ kopij grafa $K_4 - e$, povezanih v verigo, na obeh koncih pa sta pendant bloka na $5$ vozlišč;
+  \item če je $n = 4q$, je $L_n$ sestavljen iz $(n-12)/4$ kopij grafa $K_4 - e$, na koncih pa sta pendant bloka na $5$ in $7$ vozlišč.
+\end{itemize}
+
+Geometrijsko imajo grafi $L_n$ podobo verige blokov, ki se zaključuje z dvema 
+malce večjima komponentama. Na zaslonu zvezka smo za ilustracijo narisali grafe
+$L_n$ za $n=10,12,14,16,18,20,22,24$; pri majhnih $n$ je veriga kratka,
+za $n=24$ pa že vidimo izrazito ``kačasto'' strukturo.
+
+Domneva, ki jo preverjamo, je:
+
+\medskip
+\noindent
+\textbf{Domneva 10.}
+\emph{V razredu kubičnih grafov na $n$ vozliščih, kjer je $n$ sodo,
+je graf $L_n$ edini graf, ki minimizira subpath number.}
+\medskip
+
+Ker je bilo teoretično dokazano, da domneva za dovolj velika $n$ ne drži,
+je glavno odprto vprašanje, pri katerih najmanjših $n$ se $L_n$ neha obnašati
+kot minimizator.
+
+\section{Metodologija}
+
+\subsection{Konstrukcija družin grafov}
+
+Pri implementaciji ne uporabljamo formalne definicije $L_n$ neposredno,
+temveč ga zgradimo iz treh gradnikov, ki izhajajo iz grafa $K_4-e$:
+
+\begin{itemize}
+  \item \textbf{levi gradnik} je graf $K_4-e$, na katerega dodamo novo vozlišče,
+  povezano z obema vozliščema stopnje $2$; dobimo pendant blok na $5$ vozliščih
+  z naravno ``priklopno'' točko;
+  \item \textbf{srednji gradnik} je graf $K_4-e$ z označenima dvema vozliščema
+  stopnje $2$, ki služita kot levi in desni priklopni točki v verigi;
+  \item \textbf{desni gradnik} je razširitev grafa $K_4-e$ z dvema dodatnima
+  vozliščema in zgornjim vozliščem, kar skupaj tvori pendant blok na $7$ vozliščih.
+\end{itemize}
+
+Graf $L_n$ dobimo tako, da:
+\begin{enumerate}
+  \item začnemo z levim gradnikom;
+  \item dodamo ustrezno število srednjih gradnikov in jih povezujemo v verigo
+  prek označenih vozlišč stopnje $2$;
+  \item na koncu verigo zaključimo bodisi z levim bodisi z desnim gradnikom,
+  tako da ima graf natanko $n$ vozlišč in ostane kubičen.
+\end{enumerate}
+
+Podobno smo definirali dve novi družini grafov, namenjeni iskanju protimerov:
+
+\begin{description}
+  \item[star1 (funkcija \emph{build\_star})] grafe zgradimo tako, da na kratko
+  ``hrbtenico'' vozlišč stopnje $3$ pripenjamo več levi h gradnikov.
+  Dobljena struktura ima eno osrednje vozlišče in več ``krakov'', na katerih
+  so pendant bloki. Vizualno so ti grafi podobni zvezdi z več kraki.
+  \item[star2 (funkcija \emph{build\_star2})] uporabi podobno shemo, vendar
+  hrbtenico po potrebi podaljša še z vmesnim (srednjim) gradnikom.
+  Ta družina je bolje prilagojena določenim vrednostim $n$ (modularno po $6$).
+\end{description}
+
+V zvezku smo narisali grafe obeh družin za npr.\ $n=10,12,\dots,32$.
+Pri $L_n$ se vidi skoraj čista veriga, pri zvezdastih grafih pa izrazit
+osrednji vozlišči in trije ali več krakov, kar intuitivno zmanjšuje število
+možnih dolgih poti.
+
+\subsection{Izračun subpath number}
+
+Za izračun $pn(G)$ potrebujemo način, kako sistematično našteti vse
+preproste poti v grafu, ne da bi kakšno izpustili ali prešteli dvakrat.
+
+Uporabimo naslednjo idejo:
+
+\begin{enumerate}
+  \item Vsakemu vozlišču grafa priredimo indeks od $0$ do $n-1$,
+  da lahko množico obiskanih vozlišč predstavimo z bitno masko.
+  \item Za vsako vozlišče $v$ zaženemo globinsko iskanje (DFS) po grafu,
+  pri čemer maska označuje, katera vozlišča so že na trenutni poti.
+  \item Ob vsakem rekurzivnem klicu štejemo trenutno pot kot eno
+  (tudi pot dolžine $0$, kjer je na poti samo začetno vozlišče).
+  \item Iz vozlišča lahko nadaljujemo le na soseda, ki še ni v maski.
+  Tako se nobeno vozlišče na isti poti ne ponovi in dobimo preproste poti.
+\end{enumerate}
+
+Ker za vsako vozlišče $v$ sprožimo DFS, algoritem res obišče vse preproste
+poti, ki se začnejo v $v$, in vsako pot prešteje natanko enkrat --- tisti,
+ki se konča v zadnjem rekurzivnem klicu.
+Uporaba bitnih mask nam omogoča, da o obiskanih vozliščih ne vodimo
+počasnejših seznamov, pač pa preprosto testiramo posamezne bite.
+
+Časovna zahtevnost je eksponentna v $n$, kar smo potrdili tudi eksperimentalno:
+čas izvajanja hitro naraste, ko presežemo približno $n=20$ vozlišč.
+Zato je ta funkcija primerna predvsem za:
+\begin{itemize}
+  \item grafe z največ približno 20--22 vozlišči, kjer jo lahko uporabimo
+  tudi za izčrpen pregled;
+  \item evalvacijo posameznih kandidatov v metahevristiki,
+  kjer število ocen (korakov) omejimo.
+\end{itemize}
+
+\subsection{Generiranje vseh kubičnih grafov}
+
+Za manjše $n$ želimo domnevo preveriti izčrpno, zato potrebujemo 
+generator vseh neizomorfnih povezanih kubičnih grafov na $n$ vozliščih.
+
+Uporabimo vgrajeni generator v SageMath-u, ki je zgrajen na knjižnici \texttt{nauty}.
+S parametri določimo:
+\begin{itemize}
+  \item da naj ima vsak graf natanko $n$ vozlišč,
+  \item da je minimalna in maksimalna stopnja vozlišč enaka $3$,
+  \item da je graf povezan,
+  \item da nas zanimajo samo neizomorfni grafi.
+\end{itemize}
+
+Dobimo generator, ki enega za drugim vrača predstavnike izomorfnih razredov
+vseh povezanih 3-regularnih grafov na $n$ vozliščih.
+S tem lahko za vsak graf izračunamo $pn(G)$ in določimo globalni minimum.
+
+Eksperimentalno smo izračunali število takih grafov za $n=4,6,\dots,18$,
+kar je povzeto v Tabeli~\ref{tab:counts}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cc}
+\toprule
+$n$ & \# kubičnih grafov \\
+\midrule
+ 4  & 1 \\
+ 6  & 2 \\
+ 8  & 5 \\
+10  & 19 \\
+12  & 85 \\
+14  & 509 \\
+16  & 4060 \\
+18  & 41301 \\
+\bottomrule
+\end{tabular}
+\caption{Število neizomorfnih povezanih kubičnih grafov na $n$ vozliščih.}
+\label{tab:counts}
+\end{table}
+
+Rast je zelo hitra: že pri $n=18$ imamo več kot $40\,000$ grafov,
+pri $n=20$ pa bi jih bilo že več kot pol milijona.
+To upravičuje prehod na metahevristične metode za $n \ge 20$.
+
+\subsection{Metahevristika \emph{simulated annealing}}
+
+Za večja $n$ se izčrpen pregled ne izplača,
+zato uporabimo metahevristiko \emph{simulated annealing}.
+Ta metoda posnema fizični proces ohlajanja snovi:
+na začetku dopušča tudi poslabšanja, kasneje pa vedno bolj
+preferira izboljšave.
+
+Potrebujemo dve komponenti:
+
+\paragraph{Sosednji graf.}
+Iz danega kubičnega grafa $G$ generiramo soseda z eno 2-robno zamenjavo:
+izberemo dva roba $\{u,v\}$ in $\{x,y\}$ s štirimi paroma različnimi 
+vozlišči in ju preklopimo v eno od alternativnih paritev
+$\{u,x\},\{v,y\}$ ali $\{u,y\},\{v,x\}$.
+Takšno operacijo imenujemo \emph{double-edge swap}.
+Zanima nas samo rezultat, ki:
+\begin{itemize}
+  \item nima zank ali večrobov,
+  \item je še vedno 3-regularen,
+  \item je povezan.
+\end{itemize}
+Če taka zamenjava v omejenem številu poskusov ne obstaja, soseda ne zamenjamo.
+
+\paragraph{Pravilo sprejemanja.}
+Začetni graf je običajno $L_n$.
+V vsakem koraku izračunamo subpath number trenutnega grafa $G$ (energija $E$)
+in kandidata $G'$ (energija $E'$).
+Kandidata vedno sprejmemo, če $E' \le E$.
+Če je $E' > E$, ga sprejmemo z verjetnostjo
+\[
+\exp\!\left(-\frac{E'-E}{T}\right),
+\]
+kjer je $T$ trenutna temperatura.
+Temperaturo po vsakem koraku pomnožimo z faktorjem $0 < \alpha < 1$
+(na primer $\alpha = 0{,}999$).
+S tem je na začetku sprejemanje poslabšanj pogostejše,
+proti koncu pa redko, kar omogoča izogib lokalnim minimumom.
+
+Algoritem vrača najboljši graf, ki ga je videl (najmanjši $pn(G)$),
+ter potek energij skozi korake, kar smo uporabili za grafično analizo.
+
+\section{Eksperimentalni rezultati}
+
+\subsection{Preverjanje domneve za manjša $n$}
+
+Za manjša $n$ smo uporabili kombinacijo izčrpnega pregleda in usmerjenega iskanja.
+Za $n=16$ in $n=18$ smo za vse kubične grafe izračunali $pn(G)$ in shranili grafe,
+pri katerih je $pn(G) < pn(L_n)$.
+Lastnosti teh rezultatov so povzete v Tabeli~\ref{tab:smalln}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccccc}
+\toprule
+$n$ & $pn(L_n)$ & minimalni $pn(G)$ & $pn(\text{star})$ & komentar \\
+\midrule
+16 & 12744 & 3640 & 3640 & zvezdasti graf doseže globalni minimum \\
+18 & 22532 & 7072 & 7072 & zvezdasti graf doseže globalni minimum \\
+\bottomrule
+\end{tabular}
+\caption{Primerjava subpath number za $L_n$, zvezdaste grafe in globalni minimum
+pri $n=16$ in $n=18$.}
+\label{tab:smalln}
+\end{table}
+
+Vidimo, da je pri obeh teh velikostih graf $L_n$ daleč od minimizatorja:
+pri $n=16$ ima skoraj štirikrat več poti kot optimalni graf,
+pri $n=18$ pa več kot trikrat več.
+V obeh primerih globalni minimum doseže ena izmed zvezdastih konstrukcij,
+ki ima vizualno izrazito osrednje vozlišče in tri krake s pendant bloki.
+
+To pomeni, da domneva 10 že za $n=16$ in $n=18$ ne drži:
+ne samo da $L_n$ ni edini minimizator, sploh ni minimizator.
+
+\subsection{Rezultati metahevristike}
+
+Metahevristiko simulated annealing smo zagnali za
+$n = 10,12,14,16,18,20,22$,
+pri čemer je bil začetni graf vedno $L_n$.
+Število korakov je bilo $1000$,
+začetna temperatura $T_0 = 1$,
+faktor ohlajanja $\alpha = 0{,}999$.
+
+Najboljše dosežene vrednosti $pn(G)$ (energije) so v Tabeli~\ref{tab:sa}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccc}
+\toprule
+$n$ & najboljši $pn(G)$ z SA & čas izvajanja \\
+\midrule
+10 & 1276  & $\approx 1{,}5$ s \\
+12 & 3076  & $\approx 3{,}6$ s \\
+14 & 5504  & $\approx 5{,}3$ s \\
+16 & 8248  & $\approx 9{,}8$ s \\
+18 & 7072  & $\approx 16{,}0$ s \\
+20 & 14212 & $\approx 30{,}0$ s \\
+22 & 20580 & $\approx 44{,}4$ s \\
+\bottomrule
+\end{tabular}
+\caption{Najboljše vrednosti subpath number, ki jih je našel simulated annealing.}
+\label{tab:sa}
+\end{table}
+
+Za $n=16$ in $n=18$ lahko te rezultate primerjamo z znanimi globalnimi minimumi:
+
+\begin{itemize}
+  \item pri $n=16$ je globalni minimum $3640$, simulated annealing pa je
+  v enem zagonu našel graf z $pn(G)=8248$, torej precej boljši od $L_{16}$,
+  vendar še ne optimalen;
+  \item pri $n=18$ je globalni minimum $7072$, enako pa znaša tudi najboljši
+  rezultat simulated annealinga, kar pomeni, da je metahevristika v tem primeru
+  dosegla globalni minimum.
+\end{itemize}
+
+Potek energije skozi korake (narisan v zvezku) lepo pokaže značilno obnašanje:
+na začetku večja nihanja in občasna poslabšanja, proti koncu pa stabilizacija
+okoli lokalnega oziroma globalnega minimuma.
+
+\subsection{Primerjava z zvezdastimi družinami}
+
+Za različna soda $n$ smo izračunali $pn(G)$ za zvezdasti družini star1
+in star2 in jih primerjali med seboj.
+Rezultati za $n = 14, 20, 26, 32, \dots, 98$ so povzeti v Tabeli~\ref{tab:stars}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cccc}
+\toprule
+$n$ & $pn(\text{star1})$ & $pn(\text{star2})$ & boljši graf \\
+\midrule
+14 & 7188   & 5504   & star2 \\
+20 & 12816  & 11708  & star2 \\
+26 & 19596  & 19064  & star2 \\
+32 & 27528  & 27572  & star1 \\
+38 & 36612  & 37232  & star1 \\
+44 & 46848  & 48044  & star1 \\
+50 & 58236  & 60008  & star1 \\
+56 & 70776  & 73124  & star1 \\
+62 & 84468  & 87392  & star1 \\
+68 & 99312  & 102812 & star1 \\
+74 & 115308 & 119384 & star1 \\
+80 & 132456 & 137108 & star1 \\
+86 & 150756 & 155984 & star1 \\
+92 & 170208 & 176012 & star1 \\
+98 & 190812 & 197192 & star1 \\
+\bottomrule
+\end{tabular}
+\caption{Subpath number za dve zvezdasti družini grafov.}
+\label{tab:stars}
+\end{table}
+
+Vidimo, da je za manjša $n$ (14, 20, 26) boljša konstrukcija star2,
+od $n=32$ naprej pa sistematično zmaguje star1.
+V obeh primerih se vrednosti $pn(G)$ rastejo približno kvadratno z $n$,
+pri čemer je star1 asimptotsko boljši (ima počasnejšo rast).
+
+V kombinaciji z analizo za $n=16$ in $n=18$ lahko sklepamo,
+da so zvezdaste konstrukcije zelo močni kandidati za minimizatorje
+subpath number v razredu kubičnih grafov pri večjih $n$,
+medtem ko grafi $L_n$ že pri zmerno velikih $n$ močno zaostajajo.
+
+\section{Zaključek in nadaljnje delo}
+
+V poročilu smo opisali problem minimizacije subpath number v razredu
+kubičnih grafov, družino grafov $L_n$ in prvotno domnevo o njihovi optimalnosti.
+Implementirali smo:
+\begin{itemize}
+  \item konstrukcijo grafov $L_n$ in dveh zvezdastih družin,
+  \item natančen, a eksponenten algoritem za izračun $pn(G)$,
+  \item generiranje vseh neizomorfnih povezanih kubičnih grafov za majhna $n$,
+  \item metahevristični algoritem simulated annealing
+  s 2-robno zamenjavo kot sosednjo operacijo.
+\end{itemize}
+
+Eksperimentalno smo pokazali:
+\begin{itemize}
+  \item da se število kubičnih grafov zelo hitro povečuje
+  (pri $n=18$ jih je že več kot $40\,000$),
+  \item da grafi $L_n$ pri $n=16$ in $n=18$ nikakor niso minimizatorji
+        subpath number; zvezdasti grafi imajo tam več kot trikrat manj poti,
+  \item da metahevristika simulated annealing uspešno najde grafe z
+        bistveno manjšim $pn(G)$ od $pn(L_n)$, v primeru $n=18$
+        pa celo globalni minimum,
+  \item da zvezdaste konstrukcije star1 in star2 za večja $n$
+        sistematično dajejo manjše subpath number in so zato resni kandidati
+        za ``prave'' minimalne strukture.
+\end{itemize}
+
+Domneva 10 je torej že za relativno majhna $n$ napačna.
+Zvezdaste konstrukcije nakazujejo novo mož­no strukturo
+minimalnih kubičnih grafov, kjer večina vozlišč leži v pendant blokih,
+medtem ko je hrbtenica grafa kratka.
+
+Možne smeri nadaljnjega dela so:
+\begin{itemize}
+  \item teoretična analiza subpath number za družine $L_n$ in zvezdaste grafe,
+        vključno z asimptotskimi ocenami;
+  \item izboljšave metahevristike (drugačne sosednje operacije,
+        lokalno iskanje, hibridne metode);
+  \item poskus dokazati, da je ena izmed zvezdastih družin
+        dejansko minimalna v širšem razredu kubičnih grafov,
+        vsaj za dovolj velika $n$.
+\end{itemize}
+
+\end{document}
