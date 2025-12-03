@@ -154,7 +154,7 @@ def build_star2(n):
     if mod == 0:
         srednji, levi_konec = False, False
     elif mod == 2:
-        srednji, levi_konec = True, False
+        srednji, levi_konec = True, True
     elif mod == 4:
         srednji, levi_konec = False, True
 
