@@ -80,8 +80,8 @@ def simulated_annealing_subpath(
     T0=1.0,
     alpha=0.999,
     neighbor_fun=random_cubic_neighbor,
-    verbose=False
-):
+    max_tries = 500,
+    verbose=False):
     """
     Simulated annealing za minimizacijo subpath_number(G) po
     POVEZANIH kubičnih grafih z isto množico vozlišč kot Ln.
@@ -114,7 +114,7 @@ def simulated_annealing_subpath(
 
     for step in range(steps):
         # generiramo povezan kubični sosed
-        G_new = neighbor_fun(G)
+        G_new = neighbor_fun(G, max_tries)
         E_new = subpath_number(G_new)
         dE = E_new - E
 
