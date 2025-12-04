@@ -460,7 +460,7 @@ def tree_layout_positions_from_tree(T, root=0):
     dfs(root)
 
     # Končni slovar pozicij
-    vertical_scale = 3   # poljubno: 1.5 .. 5
+    vertical_scale = 4   # poljubno: 1.5 .. 5
     pos = {v: (x[v], -depth[v] * vertical_scale) for v in V}
 
     return pos
