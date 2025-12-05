@@ -1,5 +1,5 @@
 import random
-from funkcije import subpath_number
+from funkcije2 import subpath_number
 
 def random_cubic_neighbor(G, max_tries=500):
     """
