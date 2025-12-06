@@ -11,7 +11,7 @@
 
 \title{Subpath number v kubičnih grafih:\\
 minimizacija in protimeri za grafe $L_n$}
-\author{Skupina 13: Subpath number -- minimalni kubični grafi}
+\author{Žiga Obradović, Lovro Levačić}
 \date{\today}
 
 \begin{document}
@@ -179,16 +179,14 @@ Zato je ta funkcija primerna predvsem za:
 
 \subsection{Generiranje vseh kubičnih grafov}
 
-Za manjše $n$ želimo domnevo preveriti izčrpno, zato potrebujemo 
-generator vseh neizomorfnih povezanih kubičnih grafov na $n$ vozliščih.
-
-Uporabimo vgrajeni generator v SageMath-u, ki je zgrajen na knjižnici \texttt{nauty}.
-S parametri določimo:
+Za manjše $n$ želimo domnevo preveriti izčrpno, zato potrebujemo generator vseh neizomorfnih povezanih kubičnih grafov na $n$ vozliščih. 
+Uporabimo vgrajeno funkcijo v SageMath-u (nauty\_geng), ki temelji na programu \emph{geng} iz paketa \emph{nauty}.
+S parametri tej funkciji predpišemo, da:
 \begin{itemize}
-  \item da naj ima vsak graf natanko $n$ vozlišč,
-  \item da je minimalna in maksimalna stopnja vozlišč enaka $3$,
-  \item da je graf povezan,
-  \item da nas zanimajo samo neizomorfni grafi.
+\item ima vsak graf natanko $n$ vozlišč,
+\item je minimalna in maksimalna stopnja vozlišč enaka $3$ (graf je kubičen),
+\item je graf povezan,
+\item dobimo po en predstavnik iz vsakega izomorfnega razreda.
 \end{itemize}
 
 Dobimo generator, ki enega za drugim vrača predstavnike izomorfnih razredov
@@ -418,16 +416,5 @@ Domneva 10 je torej že za relativno majhna $n$ napačna.
 Zvezdaste konstrukcije nakazujejo novo mož­no strukturo
 minimalnih kubičnih grafov, kjer večina vozlišč leži v pendant blokih,
 medtem ko je hrbtenica grafa kratka.
-
-Možne smeri nadaljnjega dela so:
-\begin{itemize}
-  \item teoretična analiza subpath number za družine $L_n$ in zvezdaste grafe,
-        vključno z asimptotskimi ocenami;
-  \item izboljšave metahevristike (drugačne sosednje operacije,
-        lokalno iskanje, hibridne metode);
-  \item poskus dokazati, da je ena izmed zvezdastih družin
-        dejansko minimalna v širšem razredu kubičnih grafov,
-        vsaj za dovolj velika $n$.
-\end{itemize}
 
 \end{document}
