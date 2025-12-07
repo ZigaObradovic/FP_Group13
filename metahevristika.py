@@ -74,59 +74,140 @@ def random_cubic_neighbor(G, max_tries=500):
 
 import math
 
+def estimate_positive_dE(Ln, neighbor_fun, samples=1000, max_tries=500):
+    """
+    Oceni povprečno pozitivno dE = subpath_number(G_new) - subpath_number(G)
+    preko kratkega naključnega sprehoda po prostoru sosedov.
+
+    Če ne najde nobene pozitivne dE, vrne 0.0.
+    """
+    G = Ln.copy()
+    E = subpath_number(G)
+
+    dEs = []
+    for _ in range(int(samples)):
+        G_new = neighbor_fun(G, max_tries)
+        E_new = subpath_number(G_new)
+        dE = E_new - E
+        if dE > 0:
+            dEs.append(float(dE))
+
+        # premaknemo se naprej (da ne merimo vedno okoli istega grafa)
+        G = G_new
+        E = E_new
+
+    if dEs:
+        return sum(dEs) / len(dEs)
+    else:
+        return 0.0
+
+
 def simulated_annealing_subpath(
     Ln,
-    steps=10000,
-    T0=1.0,
-    alpha=0.999,
+    steps=20000,
+    T0=1000,        # uporabi se samo, če auto-kalibracija ne uspe
+    alpha=0.9995,    # isto
     neighbor_fun=random_cubic_neighbor,
-    max_tries = 500,
-    verbose=False):
+    max_tries=1000,
+    T_end_target = 50.0,
+    verbose=False
+):
     """
-    Simulated annealing za minimizacijo subpath_number(G) po
-    POVEZANIH kubičnih grafih z isto množico vozlišč kot Ln.
+    Simulated annealing za minimizacijo subpath_number(G) na prostoru
+    povezanih kubičnih grafov.
+
+    Sprejemna verjetnost:
+        p = exp(-dE / T)  (Metropolis)
+    z numerično stabilno zaščito pred overflowom.
 
     Parametri:
-      Ln         : začetni povezan kubični graf
-      steps      : število korakov algoritma
-      T0         : začetna temperatura
-      alpha      : faktor ohlajanja (T <- alpha * T)
-      neighbor_fun : funkcija za generiranje soseda (privzeto random_cubic_neighbor)
-      verbose    : če True, občasno izpisuje napredek
+        Ln         - začetni graf (povezan, 3-regularen)
+        steps      - število korakov
+        T0, alpha  - uporabljena le, če auto-kalibracija ne uspe (mean_dE <= 0)
+        neighbor_fun - funkcija za generiranje soseda
+        max_tries  - največ poskusov za iskanje veljavnega soseda
+        verbose    - diagnostični izpis
 
     Vrne:
-      best_G  : najboljši najdeni graf
-      best_E  : subpath_number(best_G)
-      history : seznam energij (subpath_number) skozi korake
+        best_G, best_E, history
     """
-    assert Ln.is_regular(3), "Začetni graf Ln ni kubičen."
-    assert Ln.is_connected(), "Začetni graf Ln ni povezan."
 
-    # začetno stanje
+    assert Ln.is_regular(3)
+    assert Ln.is_connected()
+
+    # Pretvorba SageMath tipov → Python
+    steps     = int(steps)
+    max_tries = int(max_tries)
+
+    # 1) Ocena povprečne pozitivne dE
+    # vzorčimo največ 'steps' ali 1000, kar je manj
+    sample_count = min(200, steps)
+    mean_dE = estimate_positive_dE(Ln, neighbor_fun, samples=sample_count, max_tries=max_tries)
+
+    # 2) Samodejna nastavitev T0 in alpha iz mean_dE in steps
+    #    Cilj: p0 ~ 0.4 na začetku, pend ~ 1e-4 na koncu
+    if mean_dE > 0:
+        p0   = 0.5     # želena začetna verjetnost sprejema tipične pozitivne dE
+        pend = 1e-7    # želena končna verjetnost sprejema tipične pozitivne dE
+
+        T0_auto   = -mean_dE / math.log(p0)
+
+        T_end_target = 50.0      # točno 100
+        alpha_auto = (T_end_target / T0_auto)**(1.0 / steps)
+
+        T     = float(T0_auto)
+        alpha = float(alpha_auto)
+
+        if verbose:
+            print(f"[AUTO] mean_dE={mean_dE:.2f}, T0={T0_auto:.2f}, T_end={T_end_target:.2f}, alpha={alpha_auto:.6f}")
+    else:
+        # fallback: uporabimo ročno podana T0 in alpha
+        T     = float(T0)
+        alpha = float(alpha)
+        if verbose:
+            print(f"[AUTO] mean_dE<=0, uporabljam podane parametre T0={T0}, alpha={alpha}")
+
+    # 3) Začetno stanje
     G = Ln.copy()
     E = subpath_number(G)
 
     best_G = G.copy()
     best_E = E
 
-    T = T0
     history = [E]
 
-    for step in range(steps):
-        # generiramo povezan kubični sosed
+    worse_total = 0
+    worse_accepted = 0
+
+    for step in range(1, steps+1):
+
+        # generiraj sosednji kubični graf
         G_new = neighbor_fun(G, max_tries)
         E_new = subpath_number(G_new)
         dE = E_new - E
 
-        # odločitev o sprejemu
         if dE <= 0:
+            # izboljšava → vedno sprejmi
             accept = True
         else:
-            accept = random.random() < math.exp(-dE / T)
+            worse_total += 1
+
+            # Metropolis sprejemna verjetnost p = exp(-dE/T)
+            x = dE / T
+
+            # numerična zaščita pred overflowom
+            if x >= 700:       # exp(-700) ≈ 5e-305 (meja double)
+                p = 0.0
+            else:
+                p = math.exp(-x)
+
+            accept = (random.random() < p)
+                
 
         if accept:
             G = G_new
             E = E_new
+            worse_accepted += 1
 
             if E < best_E:
                 best_E = E
@@ -136,7 +217,18 @@ def simulated_annealing_subpath(
         T *= alpha
         history.append(E)
 
+        # diagnostični izpis (10× v teku)
         if verbose and step % max(1, steps // 10) == 0:
-            print(f"Korak {step}, T={T:.4f}, E={E}, best_E={best_E}")
+            ratio = 100.0 * worse_accepted / worse_total if worse_total else 0.0
+            print(
+                f"Korak {int(step)}, "
+                f"T={float(T):.4f}, "
+                f"E={int(E)}, best_E={int(best_E)}, "
+                f"sprejetih slabših = {int(worse_accepted)}/{int(worse_total)} "
+                f"({ratio:.2f} %)"
+            )
+            # reset lokalne statistike za naslednji interval
+            worse_total = 0
+            worse_accepted = 0
 
     return best_G, best_E, history

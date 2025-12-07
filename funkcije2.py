@@ -142,7 +142,7 @@ def Ln_graph(n):
     
     return G
 
-def build_star(n):
+def build_caterpillar(n):
     """Naredi boljši graf kot Ln"""
 
     # Varovalka za sode n > 10
@@ -185,7 +185,7 @@ def build_star(n):
 
     return G
 
-def build_star2(n):
+def build_caterpillar2(n):
     """Naredi boljši graf kot Ln"""
 
     # Varovalka za sode n > 10
