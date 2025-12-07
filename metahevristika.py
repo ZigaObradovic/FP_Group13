@@ -151,8 +151,6 @@ def simulated_annealing_subpath(
         pend = 1e-7    # želena končna verjetnost sprejema tipične pozitivne dE
 
         T0_auto   = -mean_dE / math.log(p0)
-
-        T_end_target = 50.0      # točno 100
         alpha_auto = (T_end_target / T0_auto)**(1.0 / steps)
 
         T     = float(T0_auto)
@@ -202,12 +200,15 @@ def simulated_annealing_subpath(
                 p = math.exp(-x)
 
             accept = (random.random() < p)
+
+            if accept:
+                worse_accepted += 1
                 
 
         if accept:
             G = G_new
             E = E_new
-            worse_accepted += 1
+            
 
             if E < best_E:
                 best_E = E
