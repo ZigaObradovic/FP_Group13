@@ -1,0 +1,87 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[slovene]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\title{Tukaj pišem svoj del, da bova kasneje združila}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Simulated annealing}
+
+Za iskanje kubičnih grafov z manjšim številom podpoti od $L_n$ grafa smo uporabili metahevristični algoritem \emph{simulated annealing} (SA). Gre za 
+probabilistično metodo globalne optimizacije, ki posnema proces 
+fizikalnega ohlajanja kovin: sistem se sprva nahaja pri visoki temperaturi 
+in lahko sprejema tudi poslabšanja, postopoma pa se temperatura znižuje, 
+kar zmanjšuje verjetnost sprejemanja slabših rešitev. Pri dovolj počasnem 
+ohlajanju se algoritem z visoko verjetnostjo približa globalnemu minimumu
+energetske funkcije, katera je v našem primeru \emph{subpath number}.
+
+\subsection{Delovanje}
+
+V našem primeru je prostor iskanja sestavljen iz vseh \emph{povezanih 
+kubičnih grafov} na $n$ vozliščih. Prehod med grafi definiramo s t.\ i. 
+\emph{dvojnim prevezovanjem robov} (ang.~double-edge swap). Naj bo 
+$G = (V,E)$ kubičen graf in naj bosta izbrani dve disjunktni povezavi 
+$\{u,v\},\{x,y\} \in E$. Zamenjava poteka tako, da se povezavi odstranita 
+in nadomestita z novima paroma $\{u,x\}$ in $\{v,y\}$ ali s paroma 
+$\{u,y\}$ in $\{v,x\}$. S takimi menjavami povezav ohranimo 3-regularnost grafa. Energijska funkcija, ki jo minimiziramo, pa je v našem primeru podana z $E(G) = \text{subpath\_number}(G),$
+kjer funkcija $\text{subpath\_number}(\cdot)$ prešteje vse različne 
+podpoti v grafu.\\
+
+Proces začnemo z grafom, ki ga želimo izboljšati. V našem primeru je to graf $L_n =: G$. Pri vsakem koraku z double edge swap generiramo novega soseda $G'$ in izračunamo $\Delta E = E(G') - E(G)$.
+Če je $\Delta E \le 0$, rešitev sprejmemo. V nasprotnem primeru jo sprejmemo z verjetnostjo $$p = \exp\!\left(-\frac{\Delta E}{T}\right),$$
+kjer $T>0$ predstavlja trenutni temperaturni parameter. 
+S tem omogočimo kontrolirano sprejemanje slabših rešitev zgodaj v 
+postopku, kar preprečuje prezgodnjo ujetost v lokalne minimume. Če rešitev sprejmemo nastavimo $G := G'$ in postopek ponavljamo.\\
+
+V našem primeru smo naredili 20000 ponovitev postopka, začetni parameter $T_0$ pa je bil nastavljen tako, da se je v zgodnjih ponovitvah slabša rešitev sprejela z verjetnostjo približno 40 \%, proti koncu postopka pa skoraj nikoli.
+
+\subsection{Rezultati}
+
+Z metodo \emph{simulated annealing} smo za $n \in \{10, 12, \dots, 30\}$ iskali grafe z manjšim številom podpoti od grafa $L_n$.
+
+Kot pričakovano za $n \in \{10, 12, 14\}$ protiprimerov nismo našli, medtem ko smo za vse večje $n$ našli grafe s precej nižjim številom podpoti. Rezultati so prikazani v tabeli.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cccc}
+\hline
+n & $subpath\_number(L_n)$ & boljši $subpath\_number$ & razlika \\
+\hline
+10 & 1276 & 1276 & 0 \\
+12 & 3076 & 3076 & 0 \\
+14 & 5504 & 5504 & 0 \\
+16 & 12744 & 3640 & 9104 \\
+18 & 22532 & 7072 & 15460 \\
+20 & 51532 & 12816 & 38716 \\
+22 & 90760 & 7156 & 83604 \\
+24 & 206800 & 12220 & 194580 \\
+26 & 363788 & 21760 & 342028 \\
+28 & 827988 & 29568 & 798420 \\
+30 & 1456016 & 18520 & 1437496 \\
+\hline
+\end{tabular}
+\caption{Rezultati SA.}
+\label{tab:counts}
+\end{table}
+
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{slike/SA_grafi.png}
+\caption{Grafi pridobljeni s SA za $n =$ 26, 28 in $30$.}
+\label{fig:SA_grafi}
+\end{figure}
+
+
+\end{document}
