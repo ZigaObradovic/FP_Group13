@@ -47,9 +47,18 @@ V našem primeru smo naredili 20000 ponovitev postopka, začetni parameter $T_0$
 
 \subsection{Rezultati}
 
-Z metodo \emph{simulated annealing} smo za $n \in \{10, 12, \dots, 30\}$ iskali grafe z manjšim številom podpoti od grafa $L_n$.
+Z metodo \emph{simulated annealing} smo za $n \in \{10, 12, \dots, 30\}$ iskali grafe z manjšim številom podpoti od grafa $L_n$.\\
 
-Kot pričakovano za $n \in \{10, 12, 14\}$ protiprimerov nismo našli, medtem ko smo za vse večje $n$ našli grafe s precej nižjim številom podpoti. Rezultati so prikazani v tabeli.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{slike/SA_potek.png}
+\caption{Potek energije med simulated annealing za n = 20.}
+\label{fig:SA_potek}
+\end{figure}
+
+Na sliki lahko vidimo potek energije (števila podpoti) med procesom SA za $n=20$. Kar lahko razberemo je, da so se med postopkom sprejele tudi slabše rešitve, saj energija (število podpoti) ni strogo padajoča. Program je uspešno sprejemal tudi sabše rešitve in se s tem izognil morebitnim lokalnim minimumom. Vselej pa smo na koncu našli graf...(nadaljuj tu)
+
+Kot pričakovano za $n \in \{10, 12, 14\}$ protiprimerov nismo našli, medtem ko smo za vse večje $n$ našli grafe s precej nižjim številom podpoti. Rezultati so prikazani v spodnji tabeli.\\
 
 \begin{table}[h]
 \centering
@@ -62,7 +71,7 @@ n & $subpath\_number(L_n)$ & boljši $subpath\_number$ & razlika \\
 14 & 5504 & 5504 & 0 \\
 16 & 12744 & 3640 & 9104 \\
 18 & 22532 & 7072 & 15460 \\
-20 & 51532 & 12816 & 38716 \\
+20 & 51532 & 11708 & 38716 \\
 22 & 90760 & 7156 & 83604 \\
 24 & 206800 & 12220 & 194580 \\
 26 & 363788 & 21760 & 342028 \\
@@ -73,6 +82,8 @@ n & $subpath\_number(L_n)$ & boljši $subpath\_number$ & razlika \\
 \caption{Rezultati SA.}
 \label{tab:counts}
 \end{table}
+
+Vredno je poudariti, da v splošnem z najdenimi grafi še zdaleč ne minimiziramo števila podpoti za inzbrani $n$, čeprav so za nekatere $n$ najdeni grafi že precej dobri. Našli smo le primere grafov z manjšim številom podpoti od opazovanega $L_n$ grafa. To se dobro vidi, ko primerjamo dobljeno minimalno število podpoti za $n=28$ in $n=30$. Dobljeni graf za $n=30$ ima namreč kar za tretjino manj podpoti od dobljenega grafa za $n=28$. Ta podatek nam za graf z $n=30$ sicer ne pove veliko, medtem ko smo lahko skoraj prepričani, da za $n=28$ obstaja graf z manjšim številom podpoti.
 
 
 
