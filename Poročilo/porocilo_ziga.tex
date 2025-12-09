@@ -8,6 +8,12 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{siunitx}
+\sisetup{
+  group-separator = {.},
+  group-minimum-digits = 3
+}
 \geometry{margin=2.5cm}
 
 \title{Tukaj pišem svoj del, da bova kasneje združila}
@@ -27,20 +33,20 @@
 \toprule
 $n$ & \# kubičnih grafov \\
 \midrule
-10  & 19 \\
-12  & 85 \\
-14  & 509 \\
-16  & 4060 \\
-18  & 41301 \\
-20  & 510489 \\
-22  & 7319447 \\
+10  & \num{19} \\
+12  & \num{85} \\
+14  & \num{509} \\
+16  & \num{4060} \\
+18  & \num{41301} \\
+20  & \num{510489} \\
+22  & \num{7319447} \\
 \bottomrule
 \end{tabular}
 \caption{Število neizomorfnih povezanih kubičnih grafov na $n$ vozliščih.}
 \label{tab:st_grafov}
 \end{table}
 
-Za $n \in \{10, 12, 14, 16, 18\}$ smo pridobili vse neizomorfne povezane kubične grafe na $n$ vozliščih in za vsak graf $G$ izračunali $pn(G)$. Za vsak $n$ smo posebej primerjali število podpoti generiranega grafa $pn(G)$ s številom podpoti grafa $L_n$ $pn(L_n)$. Rezultati so prikazani v spodnji tabeli.
+Za $n \in \{10, ~12, ~14, ~16, ~18\}$ smo pridobili vse neizomorfne povezane kubične grafe na $n$ vozliščih in za vsak graf $G$ izračunali $pn(G)$. Za vsak $n$ smo posebej primerjali število podpoti generiranega grafa $pn(G)$ s številom podpoti grafa $L_n$ $pn(L_n)$. Rezultati so prikazani v spodnji tabeli.
 
 \begin{table}[H]
 \centering
@@ -48,18 +54,18 @@ Za $n \in \{10, 12, 14, 16, 18\}$ smo pridobili vse neizomorfne povezane kubičn
 \toprule
 $n$ & število boljših grafov & minimalno število podpoti & $pn(L_n)$\\
 \midrule
-10  & 0 & 1276 & 1276\\
-12  & 0 & 3076 & 3076\\
-14  & 0 & 5504 & 5504\\
-16  & 6 & 3640 & 12744\\
-18  & 23 & 7072 & 22532\\
+10  & \num{0} & \num{1276} & \num{1276}\\
+12  & \num{0} & \num{3076} & \num{3076}\\
+14  & \num{0} & \num{5504} & \num{5504}\\
+16  & \num{6} & \num{3640} & \num{12744}\\
+18  & \num{23} & \num{7072} & \num{22532}\\
 \bottomrule
 \end{tabular}
 \caption{Število vseh grafov na $n$ vozliščih z manjšim številom podpoti od grafa $L_n$.}
 \label{tab:rezultat_generiranja}
 \end{table}
 
-Na podlagi rezultatov vidimo, da domneva velja za $n \in \{10, 12, 14\}$, medtem ko lahko domnevo za $n \in \{16, 18\}$ zavrnemo. Namreč v primeru ko je $n=16$ smo našli 6 grafov z manjišim številom podpoti od grafa $L_{16}$, v primeru $n = 18$ pa že kar 23 grafov z manjišim številom podpoti od grafa $L_{18}$.
+Na podlagi rezultatov vidimo, da domneva velja za $n \in \{10, ~12, ~14\}$, medtem ko lahko domnevo za $n \in \{16, ~18\}$ zavrnemo. Namreč v primeru ko je $n=16$ smo našli 6 grafov z manjišim številom podpoti od grafa $L_{16}$, v primeru $n = 18$ pa že kar 23 grafov z manjišim številom podpoti od grafa $L_{18}$.
 
 \begin{figure}[H]
 \centering
@@ -98,11 +104,11 @@ kjer $T>0$ predstavlja trenutni temperaturni parameter.
 S tem omogočimo kontrolirano sprejemanje slabših rešitev zgodaj v 
 postopku, kar preprečuje prezgodnjo ujetost v lokalne minimume. Če rešitev sprejmemo nastavimo $G := G'$ in postopek ponavljamo.\\
 
-V našem primeru smo naredili 20000 ponovitev postopka, začetni parameter $T_0$ pa je bil nastavljen tako, da se je v zgodnjih ponovitvah slabša rešitev sprejela z verjetnostjo približno 40 \%, proti koncu postopka pa skoraj nikoli.
+V našem primeru smo naredili \num{20000} ponovitev postopka, začetni parameter $T_0$ pa je bil nastavljen tako, da se je v zgodnjih ponovitvah slabša rešitev sprejela z verjetnostjo približno 40 \%, proti koncu postopka pa skoraj nikoli.
 
 \subsection{Rezultati}
 
-Z metodo \emph{simulated annealing} smo za $n \in \{20, 22, \dots, 30\}$ iskali grafe z manjšim številom podpoti od grafa $L_n$.
+Z metodo \emph{simulated annealing} smo za $n \in \{20, ~22, ~\dots, ~30\}$ iskali grafe z manjšim številom podpoti od grafa $L_n$. Rezultati so v spodnji tabeli.
 
 \begin{table}[H]
 \centering
@@ -110,26 +116,28 @@ Z metodo \emph{simulated annealing} smo za $n \in \{20, 22, \dots, 30\}$ iskali 
 \hline
 n & $subpath\_number(L_n)$ & boljši $subpath\_number$ & razlika \\
 \hline
-20 & 51532 & 11708 & 38716 \\
-22 & 90760 & 7156 & 83604 \\
-24 & 206800 & 12220 & 194580 \\
-26 & 363788 & 21760 & 342028 \\
-28 & 827988 & 29568 & 798420 \\
-30 & 1456016 & 18520 & 1437496 \\
+20 & \num{51532}  & \num{11708} & \num{38716} \\
+22 & \num{90760}  & \num{7156}  & \num{83604} \\
+24 & \num{206800} & \num{12220} & \num{194580} \\
+26 & \num{363788} & \num{21760} & \num{342028} \\
+28 & \num{827988} & \num{29568} & \num{798420} \\
+30 & \num{1456016} & \num{18520} & \num{1437496} \\
 \hline
 \end{tabular}
 \caption{Rezultati SA.}
 \label{tab:Results_SA}
 \end{table}
 
+Ker smo našli grafe z manjšim številom podpoti, smo torej domnevo, da imajo grafi $L_n$ najmanjše število podpoti, zavrnili tudi za $n \in \{20, ~22, ~\dots, ~30\}$.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{slike/SA_potek.png}
-\caption{Potek energije med simulated annealing za n = 20.}
+\caption{Potek energije med simulated annealing za $n = 20$.}
 \label{fig:SA_potek}
 \end{figure}
 
-Na sliki lahko vidimo potek energije (števila podpoti) med procesom SA za $n=20$. Kar lahko razberemo je, da so se med postopkom sprejele tudi slabše rešitve, saj energija (število podpoti) ni strogo padajoča. Program je uspešno sprejemal tudi sabše rešitve in se s tem izognil morebitnim lokalnim minimumom. Vselej pa smo na koncu našli graf s kar 5-krat manjšim številom podpoti ob grafa $L_{20}$. Čeprav samo na podlagi rezultatov SA še ne moremo trditi, da je 11706 najmanjše število podpoti za $n = 20$, bomo kasneje dokazali, da je to pravzaprav res in da smo s postopkom SA našli graf, ki minimizira število podpoti za $n=20$.
+Na sliki lahko vidimo potek energije (števila podpoti) med procesom SA za $n=20$. Kar lahko razberemo je, da so se med postopkom sprejele tudi slabše rešitve, saj energija (število podpoti) ni strogo padajoča. Program je uspešno sprejemal tudi sabše rešitve in se s tem izognil morebitnim lokalnim minimumom. Vselej pa smo na koncu našli graf s kar 5-krat manjšim številom podpoti ob grafa $L_{20}$. Čeprav samo na podlagi rezultatov SA še ne moremo trditi, da je \num{11706} najmanjše število podpoti za $n = 20$, bomo kasneje dokazali, da je to pravzaprav res in da smo s postopkom SA našli graf, ki minimizira število podpoti za $n=20$.
 
 \begin{figure}[H]
 \centering
@@ -137,8 +145,6 @@ Na sliki lahko vidimo potek energije (števila podpoti) med procesom SA za $n=20
 \caption{Graf dobljen s SA za $n = 20$.}
 \label{fig:Cat2_20}
 \end{figure}
-
-Kot pričakovano za $n \in \{10, 12, 14\}$ protiprimerov nismo našli, medtem ko smo za vse večje $n$ našli grafe s precej nižjim številom podpoti. Rezultati so prikazani v zgornji tabeli.\\
 
 Vredno je poudariti, da v splošnem z najdenimi grafi še zdaleč ne minimiziramo števila podpoti za inzbrani $n$, čeprav so za nekatere $n$ najdeni grafi že precej dobri. Našli smo le primere grafov z manjšim številom podpoti od opazovanega $L_n$ grafa. To se dobro vidi, ko primerjamo dobljeno minimalno število podpoti za $n=28$ in $n=30$. Dobljeni graf za $n=30$ ima namreč kar za tretjino manj podpoti od dobljenega grafa za $n=28$. Ta podatek nam za graf z $n=30$ sicer ne pove veliko, medtem ko smo lahko skoraj prepričani, da za $n=28$ obstaja graf z manjšim številom podpoti.
 
@@ -151,5 +157,107 @@ Vredno je poudariti, da v splošnem z najdenimi grafi še zdaleč ne minimiziram
 \label{fig:SA_grafi}
 \end{figure}
 
+\section{Rezultati boljših grafov}
+
+Število podpoti na novo konstruiranih grafov smo sedaj primerjali neposredno z grafi $L_n$. Rezultati izračunov za $n \in \{16, 18, \dots, 40\}$ so predstavljeni v spodnji tabeli.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ccccc}
+\hline
+$n$ & $\mathrm{pn}(L_n)$ & $\mathrm{pn(Tree)}$ & $\mathrm{pn(Cat1)}$ & $\mathrm{pn(Cat2)}$ \\
+\hline
+16 & \num{12744}   & \num{3640}  & \num{3640}  & \num{3640}  \\
+18 & \num{22532}   & \num{7072}  & \num{7072}  & \num{7072}  \\
+20 & \num{51532}   & \num{12816} & \num{12816} & \cellcolor{yellow!50}\num{11708} \\
+22 & \num{90760}   & \num{7156}  & \num{7156}  & \num{7156}  \\
+24 & \num{206800}  & \num{12220} & \num{12220} & \num{12220} \\
+26 & \num{363788}  & \num{19596} & \num{19596} & \cellcolor{yellow!50}\num{19064} \\
+28 & \num{827988}  & \num{11824} & \num{11824} & \num{11824} \\
+30 & \num{1456016} & \num{18520} & \num{18520} & \num{18520} \\
+32 & \num{3312856} & \num{27528} & \num{27528} & \cellcolor{yellow!50}\num{27572} \\
+34 & \num{5825044} & \num{17644} & \num{17644} & \num{17644} \\
+36 & \num{13252444} & \num{25972} & \num{25972} & \num{25972} \\
+38 & \num{23301272} & \num{36612} & \num{36612} & \cellcolor{yellow!50}\num{37232} \\
+40 & \num{53010912} & \num{24616} & \num{24616} & \num{24616} \\
+\hline
+\end{tabular}
+\caption{Primerjava $\mathrm{pn}(L_n)$ s tremi različnimi konstrukcijami.}
+\label{tab:pn_comparison}
+\end{table}
+
+Hitro opazimo, da imajo vse tri konstrukcije veliko manjše število podpoti kot graf $L_n$. V primeru $n=40$ imajo naše konstrukcije kar \num{2153}-krat manjše število podpoti kot graf $L_{40}$. Opazimo lahko tudi, da imata grafa \emph{Cat1} in \emph{Tree} isto število podpoti. Njun subpath number se namreč ujema vse do $n=200$ (Testirali smo samo do $n=200$). To glede na njuno konstrukcijo ni nič presenetljivega, saj ju sestavlja isto število glavnih gradnikov in tudi število povezav med posameznimi gradniki je enako.
+
+Poleg vsega opazimo tudi razliko v številu podpoti med konstrukcijama \emph{Cat1} in \emph{Cat2}. Razlike se pojavijo pri $n = 6k+2$ za $k = 2,~3,~4,\dots$, kar bi lahko pričakovali, saj sta grafa različno konstruirana ravno pri teh $n$.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ccc}
+\hline
+$n$ & $\mathrm{pn(Cat1)}$ & $\mathrm{pn(Cat2)}$ \\
+\hline
+14 & \num{7188}   & \cellcolor{green!30}\num{5504} \\
+20 & \num{12816}  & \cellcolor{green!30}\num{11708} \\
+26 & \num{19596}  & \cellcolor{green!30}\num{19064} \\
+32 & \cellcolor{green!30}\num{27528}  & \num{27572} \\
+38 & \cellcolor{green!30}\num{36612}  & \num{37232} \\
+44 & \cellcolor{green!30}\num{46848}  & \num{48044} \\
+50 & \cellcolor{green!30}\num{58236}  & \num{60008} \\
+56 & \cellcolor{green!30}\num{70776}  & \num{73124} \\
+62 & \cellcolor{green!30}\num{84468}  & \num{87392} \\
+68 & \cellcolor{green!30}\num{99312}  & \num{102812} \\
+74 & \cellcolor{green!30}\num{115308} & \num{119384} \\
+80 & \cellcolor{green!30}\num{132456} & \num{137108} \\
+\hline
+\end{tabular}
+\caption{Primerjava števila podpoti med strukturama Cat1 in Cat2.}
+\label{tab:cat1_cat2}
+\end{table}
+
+Kar je zanimivo je, da ni ena izmed konstrukcij zmeraj boljša. Za $n \in \{14, ~20, ~26\}$ ima namreč najmanjše število podpoti \emph{Cat2}, medtem ko je za $n = 32, ~38, ~44, \dots$ boljši graf \emph{Cat1}.\\
+
+Če podrobno pogledamo rezultate primerjave števila podpoti grafov $L_n$ z našimi konstrukcijami opazimo, da prav za $n = 6k+2$ za $k = 2,~3,~4,\dots$ število podpoti v naših konstrukcijah doživi velik narast in ima višjo vrednost kot njegov naslednik $n + 2$ ali celo $n+4$. Ker se nam to ni zdelo smiselno, smo za $n = 20$ vrednost $\mathrm{pn(Cat2)}$, katera je za ta $n$ med našimi konstrukcijami najnižja, primerjali z vsemi kubičnimi grafi na $20$ vozliščih. Ugotovili smo, da graf \emph{Cat2} med kubičnimi grafi na $20$ vozliščih minimizira število podpoti. To pomeni, da glede tega skoka ne moremo narediti nič. To pomeni, da število podpoti ni povsem odvisno od števila vozlišč, pomembni so le posamezni gradniki znotraj grafa, katerih za $n = 6k+2$ ne moremo konstruirati. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ccccc}
+\hline
+$n$ & $\mathrm{pn}(L_n)$ & $\mathrm{pn(Tree)}$ & $\mathrm{pn(Cat1)}$ & $\mathrm{pn(Cat2)}$ \\
+\hline
+16 & \num{12744}   & \num{3640}  & \num{3640}  & \num{3640}  \\
+18 & \num{22532}   & \num{7072}  & \num{7072}  & \num{7072}  \\
+20 & \num{51532}   & \cellcolor{yellow!50}\num{12816} & \cellcolor{yellow!50}\num{12816} & \cellcolor{yellow!50}\num{11708} \\
+22 & \num{90760}   & \num{7156}  & \num{7156}  & \num{7156}  \\
+24 & \num{206800}  & \num{12220} & \num{12220} & \num{12220} \\
+26 & \num{363788}  & \cellcolor{yellow!50}\num{19596} & \cellcolor{yellow!50}\num{19596} & \cellcolor{yellow!50}\num{19064} \\
+28 & \num{827988}  & \num{11824} & \num{11824} & \num{11824} \\
+30 & \num{1456016} & \num{18520} & \num{18520} & \num{18520} \\
+32 & \num{3312856} & \cellcolor{yellow!50}\num{27528} & \cellcolor{yellow!50}\num{27528} & \cellcolor{yellow!50}\num{27572} \\
+34 & \num{5825044} & \num{17644} & \num{17644} & \num{17644} \\
+36 & \num{13252444} & \num{25972} & \num{25972} & \num{25972} \\
+38 & \num{23301272} & \cellcolor{yellow!50}\num{36612} & \cellcolor{yellow!50}\num{36612} & \cellcolor{yellow!50}\num{37232} \\
+40 & \num{53010912} & \num{24616} & \num{24616} & \num{24616} \\
+\hline
+\end{tabular}
+\caption{Primerjava $\mathrm{pn}(L_n)$ s tremi različnimi konstrukcijami.}
+\label{tab:pn_comparison2}
+\end{table}
+
+(Še nedokončan razdelek)
+
+\subsection{Simulated annealing}
+
+Želimo vedeti, če naše konstrukcije minimizirajo število podpoti za kubične grafe na $n$ vozliščih. Ker smo za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$ pregledali vse kubične grafe, lahko z gotovostjo trdimo, da konstrukcija \emph{Cat2} minimizira subpath number za kubične grafe na $n$ vozliščih za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$.\\
+
+Sedaj trdimo, da so naše konstrukcije tiste, ki minimizirajo število podpoti na kubičnih grafih. Podobno kot smo to domnevo raziskovali za $L_n$ grafe, smo tudi za te grafe protiprimere iskali s \emph{simulated annealing} metodo. Metodo smo preizkusili za $n \in \{22, ~24, ~26\}$, kjer smo prvič za začetni približek uporabili konstrukcijo \emph{Cat1}, drugič pa še konstrukcijo \emph{Tree}. V obeh primerih nam je metoda za $n=22$ in $n=24$ vrnila kar $\mathrm{pn(Cat1)}$ oziroma $\mathrm{pn(Tree)}$, prav tako pa je v primeru $n=26$ našla nižji subpath number, kateri se ujema s $\mathrm{pn(Cat1)}$. Vse vrednosti so nam bile tako že znane, kar pomeni, da z metodo \emph{simulated annealing} nismo našli kubičnih grafov na n vozliščih, z nižjim številom podpoti od naših konstrukcij za $n \in \{22, ~24, ~26\}$. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{slike/SA_potekCat26.png}
+\caption{Potek energije med simulated annealing za $n=26$ z začetnim približkom \emph{Cat1}.}
+\label{fig:SA_potekCat}
+\end{figure}
+
+Kar bi nas pri tej ugotovitvi lahko skrbelo je, da se je algoritem SA zataknil v nekem lokalnem minimumu. Vendar iz grafa poteka energije na sliki lepo vidimo, da je algoritem obravnaval tudi druge grafe s precej višjim številom podpoti. V prvih \num{2000} korakih je namreč sprejel približno $35 ~\%$ vseh slabših rešitev, kasneje pa vedno manj. Vsekakor pa to ne pomeni, da lahko z gotovostjo trdimo, da naše konstrukcije minimizirajo število podpoti med kubičnimi grafi, saj bi morali za to obravnavati čisto vse grafe, kot smo jih za $n \leq 20$.
 
 \end{document}
