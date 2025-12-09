@@ -7,17 +7,72 @@
 \usepackage{geometry}
 \usepackage{booktabs}
 \usepackage{hyperref}
+\usepackage{float}
 \geometry{margin=2.5cm}
 
 \title{Tukaj pišem svoj del, da bova kasneje združila}
+\author{Žiga}
 \date{\today}
 
 \begin{document}
 \maketitle
 
+\section{Preverjanje domneve za majhne n}
+
+Če smo domnevo želeli preveriti na vseh kubičnih grafih na $n$ vozliščih, smo morali najprej te grafe generirati. Izkazalo se je, da številov kubičnih grafov na $n$ vozliščih eksponentno raste s številom vozlišč, zato smo domnevo preverili na vseh kubičnih grafih le za $n \leq 18$.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{cc}
+\toprule
+$n$ & \# kubičnih grafov \\
+\midrule
+10  & 19 \\
+12  & 85 \\
+14  & 509 \\
+16  & 4060 \\
+18  & 41301 \\
+20  & 510489 \\
+22  & 7319447 \\
+\bottomrule
+\end{tabular}
+\caption{Število neizomorfnih povezanih kubičnih grafov na $n$ vozliščih.}
+\label{tab:st_grafov}
+\end{table}
+
+Za $n \in \{10, 12, 14, 16, 18\}$ smo pridobili vse neizomorfne povezane kubične grafe na $n$ vozliščih in za vsak graf $G$ izračunali $pn(G)$. Za vsak $n$ smo posebej primerjali število podpoti generiranega grafa $pn(G)$ s številom podpoti grafa $L_n$ $pn(L_n)$. Rezultati so prikazani v spodnji tabeli.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{cccc}
+\toprule
+$n$ & število boljših grafov & minimalno število podpoti & $pn(L_n)$\\
+\midrule
+10  & 0 & 1276 & 1276\\
+12  & 0 & 3076 & 3076\\
+14  & 0 & 5504 & 5504\\
+16  & 6 & 3640 & 12744\\
+18  & 23 & 7072 & 22532\\
+\bottomrule
+\end{tabular}
+\caption{Število vseh grafov na $n$ vozliščih z manjšim številom podpoti od grafa $L_n$.}
+\label{tab:rezultat_generiranja}
+\end{table}
+
+Na podlagi rezultatov vidimo, da domneva velja za $n \in \{10, 12, 14\}$, medtem ko lahko domnevo za $n \in \{16, 18\}$ zavrnemo. Namreč v primeru ko je $n=16$ smo našli 6 grafov z manjišim številom podpoti od grafa $L_{16}$, v primeru $n = 18$ pa že kar 23 grafov z manjišim številom podpoti od grafa $L_{18}$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{slike/n18_grafi.png}
+\caption{Grafi z najmanjšim številom podpoti za $n=18$.}
+\label{fig:n18_grafi}
+\end{figure}
+
+Ker je za $n \geq 20$ izračun \emph{subpath number} vedno zahtevnejši, grafov pa vedno več, bomo za iskanje protiprimerov uporabili drugačno metodo. Ta metoda se mimenuje \emph{simulated annealing}. 
+
 \section{Simulated annealing}
 
-Za iskanje kubičnih grafov z manjšim številom podpoti od $L_n$ grafa smo uporabili metahevristični algoritem \emph{simulated annealing} (SA). Gre za 
+Za iskanje kubičnih grafov z manjšim številom podpoti od $L_n$ grafa smo za $n \geq 20$ uporabili metahevristični algoritem \emph{simulated annealing} (SA). Gre za 
 probabilistično metodo globalne optimizacije, ki posnema proces 
 fizikalnega ohlajanja kovin: sistem se sprva nahaja pri visoki temperaturi 
 in lahko sprejema tudi poslabšanja, postopoma pa se temperatura znižuje, 
@@ -47,30 +102,14 @@ V našem primeru smo naredili 20000 ponovitev postopka, začetni parameter $T_0$
 
 \subsection{Rezultati}
 
-Z metodo \emph{simulated annealing} smo za $n \in \{10, 12, \dots, 30\}$ iskali grafe z manjšim številom podpoti od grafa $L_n$.\\
+Z metodo \emph{simulated annealing} smo za $n \in \{20, 22, \dots, 30\}$ iskali grafe z manjšim številom podpoti od grafa $L_n$.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.9\textwidth]{slike/SA_potek.png}
-\caption{Potek energije med simulated annealing za n = 20.}
-\label{fig:SA_potek}
-\end{figure}
-
-Na sliki lahko vidimo potek energije (števila podpoti) med procesom SA za $n=20$. Kar lahko razberemo je, da so se med postopkom sprejele tudi slabše rešitve, saj energija (število podpoti) ni strogo padajoča. Program je uspešno sprejemal tudi sabše rešitve in se s tem izognil morebitnim lokalnim minimumom. Vselej pa smo na koncu našli graf...(nadaljuj tu)
-
-Kot pričakovano za $n \in \{10, 12, 14\}$ protiprimerov nismo našli, medtem ko smo za vse večje $n$ našli grafe s precej nižjim številom podpoti. Rezultati so prikazani v spodnji tabeli.\\
-
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \begin{tabular}{cccc}
 \hline
 n & $subpath\_number(L_n)$ & boljši $subpath\_number$ & razlika \\
 \hline
-10 & 1276 & 1276 & 0 \\
-12 & 3076 & 3076 & 0 \\
-14 & 5504 & 5504 & 0 \\
-16 & 12744 & 3640 & 9104 \\
-18 & 22532 & 7072 & 15460 \\
 20 & 51532 & 11708 & 38716 \\
 22 & 90760 & 7156 & 83604 \\
 24 & 206800 & 12220 & 194580 \\
@@ -80,17 +119,35 @@ n & $subpath\_number(L_n)$ & boljši $subpath\_number$ & razlika \\
 \hline
 \end{tabular}
 \caption{Rezultati SA.}
-\label{tab:counts}
+\label{tab:Results_SA}
 \end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{slike/SA_potek.png}
+\caption{Potek energije med simulated annealing za n = 20.}
+\label{fig:SA_potek}
+\end{figure}
+
+Na sliki lahko vidimo potek energije (števila podpoti) med procesom SA za $n=20$. Kar lahko razberemo je, da so se med postopkom sprejele tudi slabše rešitve, saj energija (število podpoti) ni strogo padajoča. Program je uspešno sprejemal tudi sabše rešitve in se s tem izognil morebitnim lokalnim minimumom. Vselej pa smo na koncu našli graf s kar 5-krat manjšim številom podpoti ob grafa $L_{20}$. Čeprav samo na podlagi rezultatov SA še ne moremo trditi, da je 11706 najmanjše število podpoti za $n = 20$, bomo kasneje dokazali, da je to pravzaprav res in da smo s postopkom SA našli graf, ki minimizira število podpoti za $n=20$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{slike/cat2_20.png}
+\caption{Graf dobljen s SA za $n = 20$.}
+\label{fig:Cat2_20}
+\end{figure}
+
+Kot pričakovano za $n \in \{10, 12, 14\}$ protiprimerov nismo našli, medtem ko smo za vse večje $n$ našli grafe s precej nižjim številom podpoti. Rezultati so prikazani v zgornji tabeli.\\
 
 Vredno je poudariti, da v splošnem z najdenimi grafi še zdaleč ne minimiziramo števila podpoti za inzbrani $n$, čeprav so za nekatere $n$ najdeni grafi že precej dobri. Našli smo le primere grafov z manjšim številom podpoti od opazovanega $L_n$ grafa. To se dobro vidi, ko primerjamo dobljeno minimalno število podpoti za $n=28$ in $n=30$. Dobljeni graf za $n=30$ ima namreč kar za tretjino manj podpoti od dobljenega grafa za $n=28$. Ta podatek nam za graf z $n=30$ sicer ne pove veliko, medtem ko smo lahko skoraj prepričani, da za $n=28$ obstaja graf z manjšim številom podpoti.
 
 
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{slike/SA_grafi.png}
-\caption{Grafi pridobljeni s SA za $n =$ 26, 28 in $30$.}
+\includegraphics[width=0.85\textwidth]{slike/SA_grafi.png}
+\caption{Grafi pridobljeni s SA za $n =$ 26, 28 in $n=18$.}
 \label{fig:SA_grafi}
 \end{figure}
 
