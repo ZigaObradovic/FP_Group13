@@ -1,0 +1,210 @@
+documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[slovene]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{siunitx}
+\sisetup{
+  group-separator = {.},
+  group-minimum-digits = 3
+}
+\geometry{margin=2.5cm}
+
+\title{Tukaj pišem svoj del, da bova kasneje združila}
+\author{Lovro}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Uvod}
+
+Naj bo $G=(V,E)$ povezan, neorientiran graf. 
+\emph{Subpath number} grafa $G$, označen s $pn(G)$, definiramo kot število
+vseh preprostih poti v grafu, pri čemer štejemo tudi trivialne poti
+(zgolj eno vozlišče).
+Preprosta pot je zaporedje različnih vozlišč
+\[
+(v_0, v_1, \dots, v_\ell),
+\]
+kjer sta vsaki zaporedni vozlišči povezani z robom grafa; poti, ki gredo
+v nasprotni smeri, štejemo ločeno.
+Za en sam rob dobimo $pn(G)=4$, za trikotnik $pn(G)=15$,
+za popoln graf $K_4$ pa že $pn(G)=64$,
+kar nakazuje, da $pn(G)$ v splošnem raste eksponentno s številom vozlišč.
+
+V tem projektu nas zanimajo \emph{kubični grafi},
+tj.\ povezani grafi, v katerih ima vsako vozlišče stopnjo $3$.
+Za sodo število vozlišč $n$ želimo med vsemi kubičnimi grafi na $n$ vozliščih
+najti tiste, ki minimizirajo $pn(G)$.
+
+V literaturi je bila predlagana posebna družina kubičnih grafov $L_n$.
+Grafi $L_n$ so definirani za soda $n \ge 10$ in so zgrajeni iz verige
+blokov $K_4-e$, kjer $K_4-e$ pomeni popoln graf na štirih vozliščih,
+iz katerega odstranimo en rob.
+Verigi dodamo ustrezna pendant bloka na obeh koncih,
+tako da dobimo povezano 3-regularno strukturo na natančno $n$ vozliščih.
+
+\medskip
+
+Osrednja izhodiščna trditev je bila:
+
+\medskip
+\noindent
+\textbf{Domneva 10.}
+\emph{Naj bo $n \ge 10$ sodo. Med vsemi povezanimi kubičnimi grafi
+na $n$ vozliščih je graf $L_n$ edini graf, ki minimizira subpath number.}
+
+\medskip
+Znano je, da domneva za dovolj velika $n$ ne drži, ne ve se pa,
+pri katerih najmanjših $n$ se pojavi prvi protiprimer
+in kakšna je struktura grafov z majhnim $pn(G)$.
+
+\section{Domneva za boljše grafe in nove konstrukcije}
+
+Rezultati iz prejšnjih razdelkov kažejo, da grafi $L_n$ že pri $n=16$
+in $n=18$ niso minimizatorji subpath number,
+za večja $n$ pa imajo naše konstrukcije (Cat1, Cat2, $\mathrm{Tree}_n$)
+veliko manjše število podpoti od $L_n$.
+V tem razdelku na kratko opišemo, kako so te družine zgrajene,
+in formuliramo novo domnevo o njihovem obnašanju.
+
+\subsection{Osnovni gradniki na osnovi $K_4-e$}
+
+Skupni temelj vseh konstrukcij je graf $K_4-e$:
+popoln graf na štirih vozliščih, iz katerega odstranimo en rob.
+V njem imata dve vozlišči stopnjo $2$, preostali dve pa stopnjo $3$.
+Ta vozlišča stopnje $2$ interpretiramo kot \emph{priklopni vozlišči},
+prek katerih gradnik lepimo na preostanek grafa.
+
+Na $K_4-e$ dodajamo manjša drevesa, s čimer dobimo tri tipe blokov:
+\begin{itemize}
+  \item \emph{pendant blok} na $5$ vozliščih, ki se na graf priklopi v eni točki,
+  \item \emph{podaljšani blok} na $7$ vozliščih, kjer pendantu dodamo še
+        par vmesnih vozlišč,
+  \item \emph{srednji blok} z dvema priklopnima vozliščema,
+        ki služi kot člen v verigi oziroma hrbtenici grafa.
+\end{itemize}
+Pri vseh konstrukcijah skrbimo, da imajo končni grafi stopnjo $3$
+v vsakem vozlišču in so povezani.
+
+\subsection{Goseničasti konstrukciji Cat1 in Cat2}
+
+Goseničasti družini Cat1 in Cat2 sta zgrajeni tako,
+da večino vozlišč dobimo v pendant blokih,
+povezanih na razmeroma kratko hrbtenico.
+
+V različici \textbf{Cat1} postavimo v središče vozlišče stopnje $3$
+in iz njega speljemo več krakov.
+Na konce krakov pripnemo pendant bloke, vmes pa po potrebi
+dodajamo srednje in podaljšane bloke.
+Dobljeni grafi imajo izrazito zvezdasto obliko:
+majhno jedro in več daljših krakov
+
+V različici \textbf{Cat2} uporabljamo iste gradnike,
+vendar drugače razporedimo srednje in podaljšane bloke,
+zlasti pri velikostih $n = 6k+2$.
+Tam konstrukcija Cat2 zamenja nekaj pendant blokov
+z drugačno kombinacijo srednjih in podaljšanih blokov
+in s tem spremeni število podpoti.
+Razlika med Cat1 in Cat2 je lepo vidna pri $n=26$
+-(To vidm da si ze neki omenju, mogoce samo zdruziva)-
+
+Če primerjamo $\mathrm{pn}(\text{Cat1})$ in $\mathrm{pn}(\text{Cat2})$,
+vidimo tipičen vzorec:
+za manjša $n$ in posebej za $n = 6k+2$ je pogosto boljša Cat2,
+za večja $n$ pa sistematično prevlada Cat1.
+V obeh družinah subpath number raste približno kvadratno z $n$,
+a Cat1 ima pri velikih $n$ počasnejšo rast.
+
+\subsection{Drevesna družina $\mathrm{Tree}_n$}
+
+Družina $\mathrm{Tree}_n$ izhaja iz povsem drugačne,
+drevesne strukture.
+Najprej zgradimo drevo $T_k$:
+v korenu je vozlišče stopnje $3$,
+nato pa zaporedno razvejamo liste, dokler ne dosežemo želenega $k$.
+Tako dobimo razmeroma plitvo drevo z velikim številom listov.
+
+V naslednjem koraku na vsak list pripnemo gradnik na osnovi $K_4-e$
+z dvema priklopnima vozliščema.
+Oba priklopna vrha povežemo na isti list,
+s čimer dvignemo njegovo stopnjo iz $1$ na $3$,
+novi vrhovi gradnika pa so prav tako stopnje $3$.
+Končni graf je kubičen in ga označimo z $\mathrm{Tree}_n$.
+
+Struktura $\mathrm{Tree}_n$ je zelo različna od Cat1/Cat2:
+namesto nekaj krakov imamo cel “gozd” pendant blokov na listih drevesa,
+zgornji del drevesa pa ostane kratek.
+Kljub razlikam numerični rezultati kažejo,
+da imata $\mathrm{Tree}_n$ in Cat1 za vrsto $n$
+enako vrednost subpath number,
+kar nakazuje globljo povezavo med konstrukcijama.
+
+\subsection{Nova domneva}
+
+\begin{itemize}
+  \item za $n \in \{10,12,14,16,18,20\}$ je graf Cat2
+        (in z njim tudi Cat1/Tree, kjer imajo enak $pn(G)$)
+        boljši od $L_n$, pri čemer sta za $n \le 20$
+        zares pregledana \emph{vsa} kubična grafa,
+  \item za večja $n$ (do vrednosti, kjer smo računali) imajo Cat1,
+        Cat2 in $\mathrm{Tree}_n$ za dano $n$ vedno
+        veliko manjše število podpoti kot $L_n$,
+  \item numerično se subpath number Cat1 in $\mathrm{Tree}_n$
+        ujema na dolgem intervalu $n$, medtem ko Cat2 izstopa
+        predvsem pri $n = 6k+2$.
+\end{itemize}
+
+Na podlagi teh opazovanj lahko neformalno zapišemo novo domnevo:
+
+\medskip
+\noindent
+\textbf{Domneva.}
+\emph{Za majhna soda $n$ kubični graf z najmanjšim subpath number
+pripada eni izmed družin Cat1, Cat2 ali $\mathrm{Tree}_n$.
+Za $n \le 20$ je tak graf enak grafu Cat2,
+za večja $n$ pa družini Cat1 in $\mathrm{Tree}_n$
+dasta kandidata, ki ju z našimi metodami ni uspelo izboljšati.}
+
+\medskip
+Ta domneva povzema numerične rezultate in nadomesti prvotno,
+preveč optimistično domnevo o optimalnosti grafov $L_n$.
+
+\section{Zaključek}
+
+V projektu smo preučevali minimizacijo subpath number v razredu
+povezanih kubičnih grafov.
+Za $n \in \{10,12,14,16,18\}$ smo s pomočjo programa \texttt{nauty\_geng}
+pregledali vse kubične grafe in izračunali njihov $pn(G)$.
+Pokazali smo, da grafi $L_n$ za $n=10,12,14$ res dosežejo minimum,
+za $n=16$ in $n=18$ pa smo našli več protiprimerov,
+tako da izvorna domneva ne drži.
+
+Za večja $n$ smo uporabili metahevristiko \emph{simulated annealing},
+ki iz različnih začetnih grafov (tudi iz $L_n$)
+najde grafe z bistveno manjšim subpath number.
+Na tej podlagi smo definirali tri nove konstrukcijske družine:
+goseničasti konstrukciji Cat1 in Cat2 ter drevesno družino $\mathrm{Tree}_n$,
+vse zgrajene iz gradnikov na osnovi $K_4-e$.
+
+Primerjava subpath number v tabelah pokaže,
+da imajo te konstrukcije za isto $n$ velikostno razredno manjše
+število podpoti kot grafi $L_n$.
+Za $n \le 20$ je Cat2 dokazano optimalen,
+za večja $n$ pa Cat1 in $\mathrm{Tree}_n$ predstavljata zelo močne kandidate,
+ki jih z dosedanjimi metodami nismo uspeli izboljšati.
+
+Skupni zaključek je, da grafi $L_n$ niso pravi minimizatorji subpath number
+in da strukture z veliko pendant bloki (Cat1, Cat2, $\mathrm{Tree}_n$)
+veliko bolje izkoriščajo omejitve kubičnih grafov pri zmanjševanju
+števila preprostih poti.
+
+\end{document}
+
