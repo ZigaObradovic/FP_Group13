@@ -186,9 +186,20 @@ $n$ & $\mathrm{pn}(L_n)$ & $\mathrm{pn(Tree)}$ & $\mathrm{pn(Cat1)}$ & $\mathrm{
 \label{tab:pn_comparison}
 \end{table}
 
-Hitro opazimo, da imajo vse tri konstrukcije veliko manjše število podpoti kot graf $L_n$. V primeru $n=40$ imajo naše konstrukcije kar \num{2153}-krat manjše število podpoti kot graf $L_{40}$. Opazimo lahko tudi, da imata grafa \emph{Cat1} in \emph{Tree} isto število podpoti. Njun subpath number se namreč ujema vse do $n=200$ (Testirali smo samo do $n=200$). To glede na njuno konstrukcijo ni nič presenetljivega, saj ju sestavlja isto število glavnih gradnikov in tudi število povezav med posameznimi gradniki je enako.
+Hitro opazimo, da imajo vse tri konstrukcije veliko manjše število podpoti kot graf $L_n$. V primeru $n=40$ imajo naše konstrukcije kar \num{2153}-krat manjše število podpoti kot graf $L_{40}$. Opazimo lahko tudi, da imata grafa \emph{Cat1} in \emph{Tree} isto število podpoti. Njun subpath number se namreč ujema vse do $n=300$ (Testirali smo samo do $n=300$). To glede na njuno konstrukcijo ni nič presenetljivega, saj ju sestavlja isto število glavnih gradnikov in tudi število povezav med posameznimi gradniki je enako.\\
 
-Poleg vsega opazimo tudi razliko v številu podpoti med konstrukcijama \emph{Cat1} in \emph{Cat2}. Razlike se pojavijo pri $n = 6k+2$ za $k = 2,~3,~4,\dots$, kar bi lahko pričakovali, saj sta grafa različno konstruirana ravno pri teh $n$.
+\noindent\textbf{VERJETNO POPRAVEK: GLEDE NA RAZDELEK O KONSTRUKCIJAH}
+
+Poleg vsega opazimo tudi razliko v številu podpoti med konstrukcijama \emph{Cat1} in \emph{Cat2}. Razlike se pojavijo pri $n = 6k+2$ za $k = 2,~3,~4,\dots$, kar bi lahko pričakovali, saj sta grafa različno konstruirana ravno pri teh $n$. Kot vidimo na spodnji sliki, se konstrukciji pri $n=26$ razlikujeta v treh ključnih gradnikih. Če izhajamo iz konstrukcije \emph{Cat1} oz. \emph{cat2} na 22 vozliščih (konstrukciji sta za $n=22$ enaki), opazimo, da pri konstrukciji \emph{Cat1} 4 nova vozlišča vpeljemo tako, da dva skrajna \textbf{pendant bloka?} zamenjamo s \textbf{podaljšanima?} blokoma. Pri konstrukciji \emph{cat2} pa 4 nova vozlišča vpeljemo tako, da med pendant bloke vrninemo \textbf{srednji gradnik?}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{slike/Cat12_26.png}
+\caption{Konstrukciji \emph{Cat1} (levo) in \emph{Cat2} (desno) za $n=26$.}
+\label{fig:Cat12_26}
+\end{figure}
+
+Zanimivo je, da ni ena izmed konstrukcij zmeraj boljša. Za $n \in \{14, ~20, ~26\}$ ima namreč najmanjše število podpoti \emph{Cat2}, medtem ko je za $n  \in \{32, ~38, ~44, \dots\}$ boljši graf \emph{Cat1}.
 
 \begin{table}[H]
 \centering
@@ -214,8 +225,6 @@ $n$ & $\mathrm{pn(Cat1)}$ & $\mathrm{pn(Cat2)}$ \\
 \label{tab:cat1_cat2}
 \end{table}
 
-Kar je zanimivo je, da ni ena izmed konstrukcij zmeraj boljša. Za $n \in \{14, ~20, ~26\}$ ima namreč najmanjše število podpoti \emph{Cat2}, medtem ko je za $n = 32, ~38, ~44, \dots$ boljši graf \emph{Cat1}.\\
-
 Če podrobno pogledamo rezultate primerjave števila podpoti grafov $L_n$ z našimi konstrukcijami opazimo, da prav za $n = 6k+2$ za $k = 2,~3,~4,\dots$ število podpoti v naših konstrukcijah doživi velik narast in ima višjo vrednost kot njegov naslednik $n + 2$ ali celo $n+4$. Ker se nam to ni zdelo smiselno, smo za $n = 20$ vrednost $\mathrm{pn(Cat2)}$, katera je za ta $n$ med našimi konstrukcijami najnižja, primerjali z vsemi kubičnimi grafi na $20$ vozliščih. Ugotovili smo, da graf \emph{Cat2} med kubičnimi grafi na $20$ vozliščih minimizira število podpoti. To pomeni, da glede tega skoka ne moremo narediti nič. To pomeni, da število podpoti ni povsem odvisno od števila vozlišč, pomembni so le posamezni gradniki znotraj grafa, katerih za $n = 6k+2$ ne moremo konstruirati. 
 
 \begin{table}[H]
@@ -239,15 +248,22 @@ $n$ & $\mathrm{pn}(L_n)$ & $\mathrm{pn(Tree)}$ & $\mathrm{pn(Cat1)}$ & $\mathrm{
 40 & \num{53010912} & \num{24616} & \num{24616} & \num{24616} \\
 \hline
 \end{tabular}
-\caption{Primerjava $\mathrm{pn}(L_n)$ s tremi različnimi konstrukcijami.}
+\caption{Skok števila podpoti za $n = 6k+2$.}
 \label{tab:pn_comparison2}
 \end{table}
 
-(Še nedokončan razdelek)
+Za skok števila podpoti so zagotovo krivi \textbf{podaljšani} gradniki. V konstrukcijah \emph{cat1} in \emph{Tree}, ko iz $n = 6k$ preidemo v $n = 6k+2$, dve dodatni vozlišči vpeljemo tako, da enemu podaljšanemu gradniku dodamo še drugega namesto enega \textbf{pendant bloka}. Tu se v smislu števila podpoti naredi največji skok. Ko pa $n$ povečamo še za 2, torej $n = 6k+4$, ta dva podlajšana gradnika zamenjamo s tremi pendant bloki, kar nam število podpoti ponovno zmanjša. Vse tri konstrukcije in njihove razlike so predstavljene na spodnji sliki.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{slike/Tree3.png}
+\caption{Razlike v konstrukcijah \emph{tree} za $n=36$ (levo), $n=38$ (srednji) in $n=40$ (desno).}
+\label{fig:Tree3}
+\end{figure}
 
 \subsection{Simulated annealing}
 
-Želimo vedeti, če naše konstrukcije minimizirajo število podpoti za kubične grafe na $n$ vozliščih. Ker smo za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$ pregledali vse kubične grafe, lahko z gotovostjo trdimo, da konstrukcija \emph{Cat2} minimizira subpath number za kubične grafe na $n$ vozliščih za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$.\\
+Želimo vedeti, ali naše konstrukcije minimizirajo število podpoti za kubične grafe na $n$ vozliščih. Ker smo za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$ pregledali vse kubične grafe, lahko z gotovostjo trdimo, da konstrukcija \emph{Cat2} minimizira subpath number za kubične grafe na $n$ vozliščih za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$.\\
 
 Sedaj trdimo, da so naše konstrukcije tiste, ki minimizirajo število podpoti na kubičnih grafih. Podobno kot smo to domnevo raziskovali za $L_n$ grafe, smo tudi za te grafe protiprimere iskali s \emph{simulated annealing} metodo. Metodo smo preizkusili za $n \in \{22, ~24, ~26\}$, kjer smo prvič za začetni približek uporabili konstrukcijo \emph{Cat1}, drugič pa še konstrukcijo \emph{Tree}. V obeh primerih nam je metoda za $n=22$ in $n=24$ vrnila kar $\mathrm{pn(Cat1)}$ oziroma $\mathrm{pn(Tree)}$, prav tako pa je v primeru $n=26$ našla nižji subpath number, kateri se ujema s $\mathrm{pn(Cat1)}$. Vse vrednosti so nam bile tako že znane, kar pomeni, da z metodo \emph{simulated annealing} nismo našli kubičnih grafov na n vozliščih, z nižjim številom podpoti od naših konstrukcij za $n \in \{22, ~24, ~26\}$. 
 

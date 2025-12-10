@@ -519,5 +519,14 @@ def show_build_tree_tree_layout(n, root=0, **show_kwds):
 
     G.show(pos=pos, **default_kwds)
 
-
+def tree_layout_for_graph(G, root=0):
+    """
+    Za poljuben povezan graf G:
+    - vzame razpenjalno drevo T (spanning tree) z danim korenom
+    - na T naredi lep drevesni layout
+    - vrne slovar pos za uporabo v G.plot(pos=pos, ...).
+    """
+    T = spanning_tree(G, root=root)
+    pos = tree_layout_positions_from_tree(T, root=root)
+    return pos
 
