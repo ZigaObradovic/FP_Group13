@@ -12,6 +12,13 @@
 \usepackage{siunitx}
 \usepackage{amsthm}
 
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
+
 \newtheorem{theorem}{Domneva}
 
 \sisetup{
@@ -41,7 +48,6 @@
     
     \vspace{3cm}
     
-    % AVTORJI
     {\large Avtorja:\par}
     \vspace{0.2cm}
     {\large Lovro Levačić\\
@@ -62,12 +68,12 @@
 
 \section{Uvod}
 
-V projektu obravnavamo domnevo, ki govori o minimizaciji števila poti v razredu kubičnih grafov, torej grafov, kjer ima vsako vozlišče stopnjo 3. Za dani povezani graf $G$ definiramo \textit{subpath number}, označen s $pn(G)$, kot število vseh preprostih poti v grafu, vključno s trivialnimi potmi dolžine 0. Preprosta pot je zaporedje vozlišč $(v_0, v_1, \dots, v_\ell)$ brez ponovitev, kjer je vsak par zaporednih vozlišč povezan z robom.\\
+V projektu obravnavamo domnevo, ki govori o minimizaciji števila poti v razredu kubičnih grafov, torej grafov, kjer ima vsako vozlišče stopnjo 3. Za dani povezani graf $G$ definiramo \emph{subpath number}, označen s $pn(G)$, kot število vseh preprostih poti v grafu, vključno s trivialnimi potmi dolžine 0. Preprosta pot je zaporedje vozlišč $(v_0, v_1, \dots, v_\ell)$ brez ponovitev, kjer je vsak par zaporednih vozlišč povezan z robom.\\
 
-V literaturi je bila postavljena naslednja domneva.
+\noindent V literaturi je bila postavljena naslednja domneva.
 
 \begin{theorem}
-    Za vsako sodo število vozlišč $n$ obstaja natanko en kubični graf $L_n$, ki ima najmanjši subpath number med vsemi kubičnimi grafi z $n \geq 10$ vozlišči.
+    Za vsako sodo število vozlišč $n \geq 10$ obstaja natanko en kubični graf $L_n$, ki ima najmanjši subpath number med vsemi kubičnimi grafi na $n$ vozliščih.
 \end{theorem}
 
 Grafi $L_n$ so sestavljeni iz več kopij grafa $K_4 - e$ (popolnega grafa na štirih vozliščih, iz katerega odstranimo en rob), ki jih povežemo v verižni strukturi. Na obeh koncih se tej verigi dodata še posebna \textit{pendant bloka} - eden na 5, drugi pa na 7 vozlišč.
@@ -80,15 +86,15 @@ Grafi $L_n$ so sestavljeni iz več kopij grafa $K_4 - e$ (popolnega grafa na št
 \end{figure}
 
 Kasneje se je pokazalo, da domneva za dovolj velika $n$ ne drži,
-vendar še ni znano, pri katerem najmanjšem $n$ se pojavi prva protimera.
+vendar še ni znano, pri katerem najmanjšem $n$ se pojavijp prvi protimeri.
 Namen našega projekta je torej:
 \begin{itemize}
     \item preveriti domnevo za manjša, obvladljiva števila vozlišč $n$,
-    \item in poskusiti poiskati protimer, torej kubični graf z manjšim
-    subpath number kot $L_n$.
+    \item in poskusiti konstruirati kubične grafe z manjšim
+    \emph{subpath number} kot $L_n$.
 \end{itemize}
 
-\section{Testiranje domneve 1. za majhne n}
+\section{Testiranje domneve 1. za majhne $n$}
 
 Če smo domnevo želeli preveriti na vseh kubičnih grafih na $n$ vozliščih, smo morali najprej te grafe generirati. Izkazalo se je, da številov kubičnih grafov na $n$ vozliščih eksponentno raste s številom vozlišč, zato smo domnevo preverili na vseh kubičnih grafih le za $n \leq 18$.
 
@@ -111,7 +117,7 @@ $n$ & \# kubičnih grafov \\
 \label{tab:st_grafov}
 \end{table}
 
-Za $n \in \{10, ~12, ~14, ~16, ~18\}$ smo pridobili vse neizomorfne povezane kubične grafe na $n$ vozliščih in za vsak graf $G$ izračunali $pn(G)$. Za vsak $n$ smo posebej primerjali število poti generiranega grafa $pn(G)$ s številom poti grafa $L_n$ $pn(L_n)$. Rezultati so prikazani v spodnji tabeli.
+Za $n \in \{10, ~12, ~14, ~16, ~18\}$ smo pridobili vse neizomorfne povezane kubične grafe na $n$ vozliščih in za vsak graf $G$ izračunali $pn(G)$. Za vsak $n$ smo posebej primerjali število poti generiranega grafa $pn(G)$ s številom poti $pn(L_n)$ grafa $L_n$. Rezultati so prikazani v spodnji tabeli.
 
 \begin{table}[H]
 \centering
@@ -130,7 +136,7 @@ $n$ & število boljših grafov & minimalno število poti & $pn(L_n)$\\
 \label{tab:rezultat_generiranja}
 \end{table}
 
-Na podlagi rezultatov vidimo, da domneva velja za $n \in \{10, ~12, ~14\}$, medtem ko lahko domnevo za $n \in \{16, ~18\}$ zavrnemo. Namreč v primeru ko je $n=16$ smo našli 6 grafov z manjišim številom poti od grafa $L_{16}$, v primeru $n = 18$ pa že kar 23 grafov z manjišim številom poti od grafa $L_{18}$.
+Na podlagi rezultatov vidimo, da domneva velja za $n \in \{10, ~12, ~14\}$, medtem ko lahko domnevo za $n \in \{16, ~18\}$ zavrnemo. Namreč v primeru ko je $n=16$ smo našli 6 grafov z manjišim številom poti od grafa $L_{16}$, v primeru $n = 18$ pa že kar 23 grafov z manjišim številom poti od grafa $L_{18}$. Izrišimo 3 grafe na 18 vozliščih z najmanjšim številom poti.
 
 \begin{figure}[H]
 \centering
@@ -151,7 +157,7 @@ kar zmanjšuje verjetnost sprejemanja slabših rešitev. Pri dovolj počasnem
 ohlajanju se algoritem z visoko verjetnostjo približa globalnemu minimumu
 energetske funkcije, katera je v našem primeru \emph{subpath number}.
 
-\subsection{Delovanje}
+\subsection{Delovanje algoritma}
 
 V našem primeru je prostor iskanja sestavljen iz vseh \emph{povezanih 
 kubičnih grafov} na $n$ vozliščih. Prehod med grafi definiramo s t.\ i. 
@@ -198,7 +204,7 @@ Ker smo našli grafe z manjšim številom poti, smo torej domnevo, da imajo graf
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{slike/SA_potek.png}
-\caption{Potek energije med simulated annealing za $n = 20$.}
+\caption{Potek energije med \emph{simulated annealing} za $n = 20$.}
 \label{fig:SA_potek}
 \end{figure}
 
@@ -224,7 +230,7 @@ Vredno je poudariti, da v splošnem z najdenimi grafi še zdaleč ne minimiziram
 
 \section{Konstrukcije novih grafov in domneva}
 
-Ugotovili smo, da grafi $L_n$ minimizirajo število poti v kubičnih grafih le za $n \in \{10, ~12, ~14\}$. Za sode $n \geq 16$ pa smo našli po vsaj en protiprimer začetni domnevi. Ob testiranju smo opazili, da je večina grafof z manjšim številom poti od grafov $L_n$ zgrajenih na podoben način. Grafi, ki smo jih našli, so skoraj vsi sestavljeni iz \emph{pendant blokov} na 5 oziroma 7 vozliščih. Ker želimo konstruirati grafe z najmanjišim številom podpoti za vsak $n$, smo na osnovi začetnih rezultatov konstruirali grafe v goseničasti (\emph{ang. caterpillar}) in drevesni (\emph{ang. tree}) strukturi.
+Ugotovili smo, da grafi $L_n$ minimizirajo število poti v kubičnih grafih le za $n \in \{10, ~12, ~14\}$. Za sode $n \geq 16$ pa smo našli po vsaj en protiprimer začetni domnevi. Ob testiranju smo opazili, da je večina grafov z manjšim številom poti od grafov $L_n$ zgrajenih na podoben način. Grafi, ki smo jih našli, so skoraj vsi sestavljeni iz \emph{pendant blokov} na 5 oziroma 7 vozliščih. Ker želimo konstruirati grafe z najmanjišim številom podpoti za vsak $n$, smo na osnovi začetnih rezultatov konstruirali grafe v goseničasti (\emph{ang. caterpillar}) in drevesni (\emph{ang. tree}) strukturi.
 
 \begin{figure}[H]
 \centering
@@ -248,8 +254,8 @@ Ugotovili smo, da grafi $L_n$ minimizirajo število poti v kubičnih grafih le z
 Na podoben način bomo konstruirali dve vrsti grafov. Obe bosta temeljili na goseničasti strukturi:
 
 \begin{itemize}
-  \item Grafi \textbf{$Caterpillar1_n$} ($Cat1_n$) imajo v središču verigo povezanih vozlišč, na katera pripnemo pendant bloke tako, da so vsa vozlišča stopnje 3. Na vsako vozlišče verige pripnemo po en pendant blok na 5 vozliščih, kar je že dovolj, da so notranja vozlišča verige stopnje 3. Zunanjima dvema vozliščema pa obema dodamo še en pendant blok an 5 oziroma 7 vozliščih glede na $n$.
-  \item Grafi \textbf{$Caterpillar2_n$} ($Cat2_n$) imajo podobno kot grafi $Cat1_n$ v središču verigo povezanih vozlišč, na katera pripnemo pendant bloke. Razlika se pojavi le pri $n = 6k+2$ za $k = 2,~3,~4,\dots$, kjer namesto dveh pendant blokov na 7 vozliščih, na konec verige dodamo kopijo grafa $K_4 - e$. Tako dobimo podaljšano verigo, na katero so pripet le pendant bloki na 5 vozliščih.
+  \item Grafi \textbf{$Caterpillar1_n$} ($Cat1_n$) imajo v središču verigo povezanih vozlišč, na katera pripnemo pendant bloke tako, da so vsa vozlišča stopnje 3. Na vsako vozlišče verige pripnemo po en pendant blok na 5 vozliščih, kar je že dovolj, da so notranja vozlišča verige stopnje 3. Zunanjima dvema vozliščema pa dodamo še en pendant blok na 5 oziroma 7 vozliščih, glede na $n$.
+  \item Grafi \textbf{$Caterpillar2_n$} ($Cat2_n$) imajo, podobno kot grafi $Cat1_n$, v središču verigo povezanih vozlišč, na katera pripnemo pendant bloke na 5 vozliščih. Razlika se pojavi le pri $n = 6k+2$ za $k = 2,~3,~4,\dots$, kjer namesto dveh pendant blokov na 7 vozliščih, na konec verige dodamo kopijo grafa $K_4 - e$. Tako dobimo podaljšano verigo, na katero so pripet le pendant bloki na 5 vozliščih.
 \end{itemize}
 
 \begin{figure}[H]
@@ -271,7 +277,7 @@ Na podoben način bomo konstruirali dve vrsti grafov. Obe bosta temeljili na gos
 
 \subsection{Drevesna konstrukcija}
 
-Če sta prvi dve konstrukciji grafov temeljili na verižni strukturi, bo tretja temeljila na drevesni strukturi. Grafi \textbf{$Tree_n$} (za sode $n \geq 16$) imajo v središču torej drevesno strukturo, ki je razvejana tako, da je vsako notranje vozlišče stopnje 3. Na vsak list, ki je v začetni strukturi stopnje 1, pa pripnemo dva pendant bloka na 5 vozliščih. Glede na $n$ nato en oziroma dva pendant bloka na 5 vozliščih zamenjamo s pendant blokom na 7 vozliščih. Da lahko dosežemo željeno drevesno obliko, grafe $Tree_n$ definiramo samo za sode $n \geq 16$.
+Če sta prvi dve konstrukciji grafov temeljili na verižni strukturi, bo tretja temeljila na drevesni strukturi. Grafi \textbf{$Tree_n$} (za sode $n \geq 16$) imajo v središču torej drevesno strukturo, ki je razvejana tako, da je vsako notranje vozlišče stopnje 3. Na vsak list, ki je v začetni strukturi stopnje 1, pa pripnemo dva pendant bloka na 5 vozliščih. Glede na $n$ nato enega oziroma dva pendant bloka na 5 vozliščih zamenjamo s pendant blokom na 7 vozliščih. Da lahko dosežemo željeno drevesno obliko, grafe $Tree_n$ definiramo samo za sode $n \geq 16$.
 
 \begin{figure}[H]
 \centering
@@ -288,7 +294,7 @@ Ker smo našo začetno domnevo ovrgli že pri precej majhnih $n$, sedaj šelimo 
 Graf, ki minimizira število poti v grafu v razredu kubičnih grafov na $n$ vozliščih, za $n \geq 10$, je enden izmed grafov $Caterpillar1_n$, $Caterpillar2_n$ ali $Tree_n$.
 \end{theorem}
 
-Odslej bo torej naša naloga, da s testiranjem preverimo pravilnost naše domneve.
+\noindent Odslej bo torej naša naloga, da s testiranjem preverimo pravilnost naše domneve.
 
 \section{Testiranje domneve 2.}
 
@@ -319,9 +325,9 @@ $n$ & $\mathrm{pn}(L_n)$ & pn($Tree_n$) & pn($Cat1_n$) & pn($Cat2_n$) \\
 \label{tab:pn_comparison}
 \end{table}
 
-Hitro opazimo, da imajo vse tri konstrukcije veliko manjše število poti kot graf $L_n$. V primeru $n=40$ imajo naše konstrukcije kar \num{2153}-krat manjše število poti kot graf $L_{40}$. Opazimo lahko tudi, da imata grafa $Cat1_n$ in $Tree_n$ isto število poti za vsak $n$. Njun subpath number se namreč ujema vse do $n=300$ (Testirali smo samo do $n=300$). To glede na njuno konstrukcijo ni nič presenetljivega, saj ju sestavlja isto število glavnih gradnikov in tudi število povezav med posameznimi gradniki je enako.\\
+Hitro opazimo, da imajo vse tri konstrukcije veliko manjše število poti kot graf $L_n$. V primeru $n=40$ imajo naše konstrukcije kar \num{2153}-krat manjše število poti kot graf $L_{40}$. Opazimo lahko tudi, da imata grafa $Cat1_n$ in $Tree_n$ isto število poti za vsak $n$. Njun \emph{subpath number} se namreč ujema vse do $n=300$ (testirali smo samo do $n=300$). To glede na njuno konstrukcijo ni nič presenetljivega, saj ju sestavlja isto število glavnih gradnikov in tudi število povezav med posameznimi gradniki je enako.\\
 
-Poleg vsega opazimo tudi razliko v številu poti med grafoma $Cat1_n$ in $Cat2_n$. Razlike se pojavijo pri $n = 6k+2$ za $k = 2,~3,~4,\dots$, kar bi lahko pričakovali, saj sta grafa različno konstruirana ravno pri teh $n$. Kot vidimo na spodnji sliki, se konstrukciji pri $n=26$ razlikujeta v treh ključnih gradnikih. Če izhajamo iz konstrukcije $Cat1_{22}$ oz. $Cat2_{22}$ na 22 vozliščih (konstrukciji sta za $n=22$ enaki), opazimo, da pri konstrukciji $Cat1_{26}$ 4 nova vozlišča vpeljemo tako, da dva skrajna pendant bloka na 5 vozliščih zamenjamo z dvema pendant blokoma na 7 vozliščih. Pri konstrukciji $Cat2_{26}$ pa 4 nova vozlišča vpeljemo tako, da med pendant bloke na 5 vozliščih vrninemo graf $K_4 - e$.
+Poleg vsega opazimo tudi razliko v \emph{subpath number} med grafoma $Cat1_n$ in $Cat2_n$. Razlike se pojavijo pri $n = 6k+2$ za $k = 2,~3,~4,\dots$, kar bi lahko pričakovali, saj sta grafa različno konstruirana ravno pri teh $n$. Kot vidimo na spodnji sliki, se konstrukciji pri $n=26$ razlikujeta v treh ključnih gradnikih. Če izhajamo iz konstrukcije $Cat1_{22}$ oziroma $Cat2_{22}$ na 22 vozliščih (konstrukciji sta za $n=22$ enaki), opazimo, da pri konstrukciji $Cat1_{26}$ 4 nova vozlišča vpeljemo tako, da dva skrajna pendant bloka na 5 vozliščih zamenjamo z dvema pendant blokoma na 7 vozliščih. Pri konstrukciji $Cat2_{26}$ pa 4 nova vozlišča vpeljemo tako, da središčno verigo podaljšamo z grafom $K_4 - e$.
 
 \begin{figure}[H]
 \centering
@@ -394,14 +400,14 @@ Za skok števila poti so zagotovo krivi pendant bloki na 7 vozliščih. V konstr
 
 \subsection{Simulated annealing}
 
-Želimo vedeti, ali naše konstrukcije minimizirajo število poti za kubične grafe na $n$ vozliščih. Ker smo za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$ pregledali vse kubične grafe, lahko z gotovostjo trdimo, da konstrukcija $Cat2_n$ minimizira subpath number za kubične grafe na $n$ vozliščih za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$.\\
+Želimo vedeti, ali naše konstrukcije minimizirajo število poti za kubične grafe na $n$ vozliščih. Ker smo za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$ pregledali vse kubične grafe, lahko z gotovostjo trdimo, da konstrukcija $Cat2_n$ minimizira \emph{subpath number} za kubične grafe na $n$ vozliščih za $n \in \{10, ~12, ~14, ~16, ~18, ~20\}$.\\
 
-Sedaj trdimo, da so naše konstrukcije tiste, ki minimizirajo število poti na kubičnih grafih. Podobno kot smo to domnevo raziskovali za $L_n$ grafe, smo tudi za te grafe protiprimere iskali s \emph{simulated annealing} metodo. Metodo smo preizkusili za $n \in \{22, ~24, ~26\}$, kjer smo prvič za začetni približek uporabili konstrukcijo $Cat1_n$, drugič pa še konstrukcijo $Tree_n$. V obeh primerih nam je metoda za $n=22$ in $n=24$ vrnila kar pn($Cat1_n$) oziroma pn($Tree_n$), prav tako pa je v primeru $n=26$ našla nižji subpath number, kateri se ujema s pn($Cat1_n$). Vse vrednosti so nam bile tako že znane, kar pomeni, da z metodo \emph{simulated annealing} nismo našli kubičnih grafov na n vozliščih, z nižjim številom poti od naših konstrukcij za $n \in \{22, ~24, ~26\}$. 
+Sedaj trdimo, da so naše konstrukcije tiste, ki minimizirajo število poti na kubičnih grafih. Podobno kot smo to domnevo testirali za $L_n$ grafe, smo tudi za te grafe protiprimere iskali s \emph{simulated annealing} metodo. Metodo smo preizkusili za $n \in \{22, ~24, ~26\}$, kjer smo prvič za začetni približek uporabili konstrukcijo $Cat1_n$, drugič pa še konstrukcijo $Tree_n$. V obeh primerih nam je metoda za $n=22$ in $n=24$ vrnila kar pn($Cat1_n$) oziroma pn($Tree_n$), prav tako pa je v primeru $n=26$ našla nižji \emph{subpath number}, kateri se ujema s pn($Cat1_n$). Vse vrednosti so nam bile tako že znane, kar pomeni, da z metodo \emph{simulated annealing} nismo našli kubičnih grafov na n vozliščih, z nižjim številom poti od naših konstrukcij za $n \in \{22, ~24, ~26\}$. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{slike/SA_potekCat26.png}
-\caption{Potek energije med simulated annealing za $n=26$ z začetnim približkom $Cat1_n$.}
+\caption{Potek energije med \emph{simulated annealing} za $n=26$ z začetnim približkom $Cat1_n$.}
 \label{fig:SA_potekCat}
 \end{figure}
 
@@ -409,11 +415,11 @@ Kar bi nas pri tej ugotovitvi lahko skrbelo je, da se je algoritem SA zataknil v
 
 \section{Zaključek}
 
-V projektu smo preučevali domnevo, da grafi $L_n$ minimizirajo subpath number med vsemi povezanimi kubičnimi grafi na $n$ vozliščih, kjer je $n \geq 10$ sodo. S popolnim pregledom vseh neizomorfnih kubičnih grafov za $n \leq 18$ smo ugotovili, da domneva velja le za $n \in \{10, ~12, ~14\}$, medtem ko se za $n = 16$ in $n=18$ pojavijo protiprimeri. Za večje vrednosti $n$ pa smo uporabili metahevristični algoritem \emph{simulated annealing}, s katerim smo za $n \in \{20, ~22, \dots, ~30\}$ našli grafe z mnogo manjšim številom poti od grafa $L_n$. Izkazalo se je, da se razlika med številom poti grafa $L_n$ in najdenih boljših grafov hitro povečuje z rastjo $n$. S tem smo dokončno ovrgli začetno domnevo.\\
+V projektu smo preučevali domnevo, da grafi $L_n$ minimizirajo \emph{subpath number} med vsemi povezanimi kubičnimi grafi na $n$ vozliščih, kjer je $n \geq 10$ sodo. S popolnim pregledom vseh neizomorfnih kubičnih grafov za $n \leq 18$ smo ugotovili, da domneva velja le za $n \in \{10, ~12, ~14\}$, medtem ko se za $n = 16$ in $n=18$ pojavijo protiprimeri. Za večje vrednosti $n$ pa smo uporabili metahevristični algoritem \emph{simulated annealing}, s katerim smo za $n \in \{20, ~22, \dots, ~30\}$ našli grafe z mnogo manjšim številom poti od grafa $L_n$. Izkazalo se je, da se razlika med številom poti grafa $L_n$ in najdenih boljših grafov hitro povečuje z rastjo $n$. S tem smo dokončno ovrgli začetno domnevo.\\
 
-Opazili smo, da imajo vsi najboljši najdeni grafi izrazito podobno strukturo, zgrajeno predvsem iz pendant blokov na 5 in 7 vozliščih. Na osnovi teh opažanj smo konstruirali tri grafe: $Cat1_n$ $Cat2_n$ in $Tree_n$. Pokazali smo, da imajo vse tri konstrukcije bistveno manjše število poti od grafov $L_n$; v številnih primerih celo več tisočkrat manj. Primerjava konstrukcij razkrije tudi značilen skok v subpath number pri $n = 6k + 2$, ki ga povzroča nujna uporaba pendant blokov na 7 vozliščih. Pri manjših $n$ smo lahko dokazali, da konstrukcija $Cat2_n$ dejansko minimizira število poti med vsemi kubičnimi grafi (za $n \le 20$). Pri večjih $n$ smo novo domnevo preverjali z metodo simulated annealing, ki ni našla boljših grafov od naših konstrukcij, kar dodatno potrjuje pravilnost postavljene domneve.\\
+Opazili smo, da imajo vsi najboljši najdeni grafi izrazito podobno strukturo, zgrajeno predvsem iz pendant blokov na 5 in 7 vozliščih. Na osnovi teh opažanj smo konstruirali tri grafe: $Cat1_n$ $Cat2_n$ in $Tree_n$. Pokazali smo, da imajo vse tri konstrukcije bistveno manjše število poti od grafov $L_n$; v številnih primerih celo več tisočkrat manj. Primerjava konstrukcij razkrije tudi značilen skok v \emph{subpath number} pri $n = 6k + 2$, ki ga povzroča nujna uporaba pendant blokov na 7 vozliščih. Pri manjših $n$ smo lahko dokazali, da konstrukcija $Cat2_n$ dejansko minimizira število poti med vsemi kubičnimi grafi (za $n \le 20$). Pri večjih $n$ pa smo novo domnevo preverjali z metodo \emph{simulated annealing}, ki ni našla boljših grafov od naših konstrukcij, kar dodatno potrjuje pravilnost postavljene domneve.\\
 
-Ugotavljamo torej, da začetna domneva ne drži in da je minimizacija števila poti v kubičnih grafih tesno povezana s kombinatoriko pendant blokov in njihovo razmestitvijo. Nova domneva, da optimalni graf za dano sode $n \geq 10$ pripada eni izmed konstrukcij $Cat1_n$, $Cat2_n$ ali $Tree_n$, se skladno ujema z vsemi eksperimentalnimi rezultati. Za dokončno potrditev pa bo potrebna še nadaljnja analiza, ki bi v idealnem primeru v celoti opisala strukturo vseh grafov, ki minimizirajo subpath number za poljubno sodo število vozlišč.
+Ugotavljamo torej, da začetna domneva ne drži in da je minimizacija števila poti v kubičnih grafih tesno povezana s kombinatoriko pendant blokov in njihovo razmestitvijo. Nova domneva, da optimalni graf za dano sode $n \geq 10$ pripada eni izmed konstrukcij $Cat1_n$, $Cat2_n$ ali $Tree_n$, se skladno ujema z vsemi eksperimentalnimi rezultati. Za dokončno potrditev pa bo potrebna še nadaljnja analiza, ki bi v idealnem primeru v celoti opisala strukturo vseh grafov, ki minimizirajo \emph{subpath number} za poljubno sodo število vozlišč.
 
 
 \end{document}
