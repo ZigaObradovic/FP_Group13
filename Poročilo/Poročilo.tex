@@ -419,7 +419,7 @@ Sedaj trdimo, da so naše konstrukcije tiste, ki minimizirajo število poti na k
 
 Kar bi nas pri tej ugotovitvi lahko skrbelo je, da se je algoritem SA zataknil v nekem lokalnem minimumu. Vendar iz grafa poteka energije na sliki lepo vidimo, da je algoritem obravnaval tudi druge grafe s precej višjim številom poti. V prvih \num{2000} korakih je namreč sprejel približno $35 ~\%$ vseh slabših rešitev, kasneje pa vedno manj. Vsekakor pa to ne pomeni, da lahko z gotovostjo trdimo, da naše konstrukcije minimizirajo število poti med kubičnimi grafi, saj bi morali za to obravnavati čisto vse grafe, kot smo jih za $n \leq 20$.
 
-\section{Zaključek}
+\section{Zaključek in izris najboljših grafov}
 
 V projektu smo preučevali domnevo, da grafi $L_n$ minimizirajo \emph{subpath number} med vsemi povezanimi kubičnimi grafi na $n$ vozliščih, kjer je $n \geq 10$ sodo. S popolnim pregledom vseh neizomorfnih kubičnih grafov za $n \leq 18$ smo ugotovili, da domneva velja le za $n \in \{10, ~12, ~14\}$, medtem ko se za $n = 16$ in $n=18$ pojavijo protiprimeri. Za večje vrednosti $n$ pa smo uporabili metahevristični algoritem \emph{simulated annealing}, s katerim smo za $n \in \{20, ~22, \dots, ~30\}$ našli grafe z mnogo manjšim številom poti od grafa $L_n$. Izkazalo se je, da se razlika med številom poti grafa $L_n$ in najdenih boljših grafov hitro povečuje z rastjo $n$. S tem smo dokončno ovrgli začetno domnevo.\\
 
